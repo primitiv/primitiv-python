@@ -6,13 +6,13 @@ Dependency
 
 * C++ primitiv
 * Python 3 (3.5 or later)
-* NumPy
+* NumPy (1.11.0 or later)
 * Cython (0.27 or later)
 
 How to install?
 ---------------------------------
 
-1. Install [C++ primitiv](http://github.com/primitiv/primitiv):
+1. Install [primitiv core library](http://github.com/primitiv/primitiv):
 
 ```
 $ cmake .. [options]
@@ -39,5 +39,4 @@ $ sudo python3 ./setup.py install [--enable-cuda] [--enable-opencl]
 
 You also can use `LIBRARY_PATH` and `CPLUS_INCLUDE_PATH` depending on your environment.
 
-CUDA and OpenCL are not available in the default settings. Please add `--enable-cuda` and/or
- `--enable-opencl` option to all commands above if you want to enable CUDA and/or OpenCL.
+To install CUDA and/or OpenCL support, run setup script with `--enable-DEVICE` option.
