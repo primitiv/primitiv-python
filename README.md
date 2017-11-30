@@ -12,7 +12,7 @@ Dependency
 How to install?
 ---------------------------------
 
-1. Install C++ primitiv:
+1. Install [C++ primitiv](http://github.com/primitiv/primitiv):
 
 ```
 $ cmake .. [options]
