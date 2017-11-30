@@ -6,6 +6,7 @@ Dependency
 
 * C++ primitiv
 * Python 3 (3.5 or later)
+* NumPy
 * Cython (0.27 or later)
 
 How to install?
@@ -31,12 +32,12 @@ Currently, Cython 0.27 is not contained in Debian and Ubuntu repositories.
 3. Run the following commands in python-primitiv directory:
 
 ```
-$ python3 ./setup.py build
+$ python3 ./setup.py build [--enable-cuda] [--enable-opencl]
 $ python3 ./setup.py test  # (optional)
-$ sudo python3 ./setup.py install
+$ sudo python3 ./setup.py install [--enable-cuda] [--enable-opencl]
 ```
 
 You also can use `LIBRARY_PATH` and `CPLUS_INCLUDE_PATH` depending on your environment.
 
-CUDA is not available in the default settings. Please add `--enable-cuda` option
-to all commands above if you want to enable CUDA.
+CUDA and OpenCL are not available in the default settings. Please add `--enable-cuda` and/or
+ `--enable-opencl` option to all commands above if you want to enable CUDA and/or OpenCL.
