@@ -76,11 +76,11 @@ cdef class Model:
         else:
             raise TypeError("Argument 'arg' has incorrect type (Parameter or Model)")
 
-    def add_all_parameters(self):
-        """Registers all ``Parameter`` members of this model.
+    def scan_attributes(self):
+        """Registers all parameter and model members of this model.
 
-        This method internally calls `add_parameter()` for all Parameter
-        members of this model with variable names.
+        This method internally calls ``add()`` for all ``Parameter`` and
+        ``Model`` members of this model with variable names.
 
         Example:
 
@@ -88,47 +88,27 @@ cdef class Model:
             ...     def __init__(self):
             ...         self.subparam1 = Parameter()
             ...         self.subparam2 = Parameter()
-            ...         self.add_all_parameters()
-
-        is equivalent to:
-
-            >>> class ParentModel(Model):
-            ...     def __init__(self):
-            ...         self.subparam1 = Parameter()
-            ...         self.subparam2 = Parameter()
-            ...         self.add("subparam1", self.subparam1)
-            ...         self.add("subparam2", self.subparam2)
-
-        """
-        for k, v in self.__dict__.items():
-            if isinstance(v, Parameter) and v not in self.added_parameters:
-                self.add(k, v)
-
-    def add_all_submodels(self):
-        """Registers all ``Model`` members of this model.
-
-        This method internally calls `add_submodel()` for all Model
-        members of this model with variable names.
-
-        Example:
-
-            >>> class ParentModel(Model):
-            ...     def __init__(self):
             ...         self.submodel1 = SubModel1() # Sub class of Model
             ...         self.submodel2 = SubModel2() # Sub class of Model
-            ...         self.add_all_submodels()
+            ...         self.scan_attributes()
 
         is equivalent to:
 
             >>> class ParentModel(Model):
             ...     def __init__(self):
+            ...         self.subparam1 = Parameter()
+            ...         self.subparam2 = Parameter()
             ...         self.submodel1 = SubModel1()
             ...         self.submodel2 = SubModel2()
+            ...         self.add("subparam1", self.subparam1)
+            ...         self.add("subparam2", self.subparam2)
             ...         self.add("submodel1", self.submodel1)
             ...         self.add("submodel2", self.submodel2)
 
         """
         for k, v in self.__dict__.items():
+            if isinstance(v, Parameter) and v not in self.added_parameters:
+                self.add(k, v)
             if isinstance(v, Model) and v not in self.added_submodels:
                 self.add(k, v)
 
