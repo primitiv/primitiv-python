@@ -24,8 +24,8 @@ cdef extern from "primitiv/optimizer.h":
         void set_weight_decay(float strength) except +
         float get_gradient_clipping() except +
         void set_gradient_clipping(float threshold) except +
-        void add_parameter(CppParameter &param) except +
-        void add_model(CppModel &model) except +
+        void add(CppParameter &param) except +
+        void add(CppModel &model) except +
         void reset_gradients() except +
         void update() except +
         void get_configs(unordered_map[string, unsigned] &uint_configs, unordered_map[string, float] &float_configs) except +

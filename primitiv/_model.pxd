@@ -12,8 +12,8 @@ cdef extern from "primitiv/model.h":
         CppModel() except +
         void load(string &path, bool with_stats, CppDevice &device) except +
         void save(string &path, bool with_stats) except +
-        void add_parameter(string &name, CppParameter &param) except +
-        void add_submodel(string &name, CppModel &model) except +
+        void add(string &name, CppParameter &param) except +
+        void add(string &name, CppModel &model) except +
         CppParameter &get_parameter(string &name) except +
         CppParameter &get_parameter(vector[string] &names) except +
         CppModel &get_submodel(string &name) except +

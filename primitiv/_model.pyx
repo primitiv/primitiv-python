@@ -55,35 +55,26 @@ cdef class Model:
         """
         self.wrapped.save(pystr_to_cppstr(path), with_stats)
 
-    def add_parameter(self, str name, Parameter param):
-        """Registers a new parameter.
-
-        :param name: Name of the parameter.
-        :type path: str
-        :param param: Reference to the parameter.
-        :type param: primitiv.Parameter
-
-        ``name`` should not be overlapped with all registered parameters and
-        submodels.
-
-        """
-        self.wrapped.add_parameter(pystr_to_cppstr(name), param.wrapped[0])
-        self.added_parameters.append(param)
-
-    def add_submodel(self, str name, Model model):
-        """Registers a new submodel.
+    def add(self, str name, arg):
+        """Registers a new parameter or a new submodel.
 
         :param name: Name of the submodel.
         :type name: str
-        :param model: Reference to the submodel.
-        :type model: primitiv.Model
+        :param arg: Parameter or submodel to register.
+        :type arg: primitiv.Parameter or primitiv.Model
 
         ``name`` should not be overlapped with all registered parameters and
         submodels.
 
         """
-        self.wrapped.add_submodel(pystr_to_cppstr(name), model.wrapped[0])
-        self.added_submodels.append(model)
+        if isinstance(arg, Parameter):
+            self.wrapped.add(pystr_to_cppstr(name), (<Parameter> arg).wrapped[0])
+            self.added_parameters.append(arg)
+        elif isinstance(arg, Model):
+            self.wrapped.add(pystr_to_cppstr(name), (<Model> arg).wrapped[0])
+            self.added_submodels.append(arg)
+        else:
+            raise TypeError("Argument 'arg' has incorrect type (Parameter or Model)")
 
     def add_all_parameters(self):
         """Registers all ``Parameter`` members of this model.
@@ -105,13 +96,13 @@ cdef class Model:
             ...     def __init__(self):
             ...         self.subparam1 = Parameter()
             ...         self.subparam2 = Parameter()
-            ...         self.add_parameter("subparam1", self.subparam1)
-            ...         self.add_parameter("subparam2", self.subparam2)
+            ...         self.add("subparam1", self.subparam1)
+            ...         self.add("subparam2", self.subparam2)
 
         """
         for k, v in self.__dict__.items():
             if isinstance(v, Parameter) and v not in self.added_parameters:
-                self.add_parameter(k, v)
+                self.add(k, v)
 
     def add_all_submodels(self):
         """Registers all ``Model`` members of this model.
@@ -133,13 +124,13 @@ cdef class Model:
             ...     def __init__(self):
             ...         self.submodel1 = SubModel1()
             ...         self.submodel2 = SubModel2()
-            ...         self.add_submodel("submodel1", self.submodel1)
-            ...         self.add_submodel("submodel2", self.submodel2)
+            ...         self.add("submodel1", self.submodel1)
+            ...         self.add("submodel2", self.submodel2)
 
         """
         for k, v in self.__dict__.items():
             if isinstance(v, Model) and v not in self.added_submodels:
-                self.add_submodel(k, v)
+                self.add(k, v)
 
     def __getitem__(self, key):
         """Retrieves a parameter or a model in this model.

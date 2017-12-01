@@ -163,24 +163,29 @@ cdef class Optimizer:
         self.wrapped.set_gradient_clipping(threshold)
         return
 
-    def add_parameter(self, Parameter param):
-        """Registers a parameter.
+    def add(self, *args):
+        """Registers multiple parameters and models.
 
-        :param param: Parameter to be optimized.
-        :type param: primitiv.Parameter
+        :param args: Variable argument of Parameter or Model to be optimized.
+        :type args: primitiv.Parameter or primitiv.Model
+
+        This function behaves similar to multiple ``add()`` calls with the same
+        order of arguments.
+
+        E.g., below lines should behave similarly (except the case of exceptions):
+
+            >>> add(a, b, c, d)
+            >>> add(a, b); add(c, d)
+            >>> add(a); add(b); add(c); add(d)
 
         """
-        self.wrapped.add_parameter(param.wrapped[0])
-        return
-
-    def add_model(self, Model model):
-        """Registers all trainable parameters in a model.
-
-        :param model: Model to be optimized.
-        :type model: primitiv.Model
-
-        """
-        self.wrapped.add_model(model.wrapped[0])
+        for i, arg in enumerate(args):
+            if isinstance(arg, Parameter):
+                self.wrapped.add((<Parameter> arg).wrapped[0])
+            elif isinstance(arg, Parameter):
+                self.wrapped.add((<Model> arg).wrapped[0])
+            else:
+                raise TypeError("Argument %d has incorrect type (Parameter or Model)" % (i + 1))
         return
 
     def reset_gradients(self):
