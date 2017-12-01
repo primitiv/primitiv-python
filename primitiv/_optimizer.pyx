@@ -174,9 +174,9 @@ cdef class Optimizer:
 
         E.g., below lines should behave similarly (except the case of exceptions):
 
-            >>> add(a, b, c, d)
-            >>> add(a, b); add(c, d)
-            >>> add(a); add(b); add(c); add(d)
+            >>> opt.add(a, b, c, d)
+            >>> opt.add(a, b); add(c, d)
+            >>> opt.add(a); opt.add(b); opt.add(c); opt.add(d)
 
         """
         for i, arg in enumerate(args):
