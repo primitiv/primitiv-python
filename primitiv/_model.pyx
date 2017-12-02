@@ -77,17 +77,18 @@ cdef class Model:
             raise TypeError("Argument 'arg' has incorrect type (Parameter or Model)")
 
     def scan_attributes(self):
-        """Registers all parameter and model members of this model.
+        """Registers all parameter and model members in this model.
 
-        This method internally calls ``add()`` for all ``Parameter`` and
-        ``Model`` members of this model with variable names.
+        This method searches all Parameter and Model objects defined as the
+        attributes in the model object, and calls add() for each parameter/model
+        using corresponding attribute key to the name argument.
 
         Example:
 
             >>> class ParentModel(Model):
             ...     def __init__(self):
-            ...         self.subparam1 = Parameter()
-            ...         self.subparam2 = Parameter()
+            ...         self.param1 = Parameter()
+            ...         self.param2 = Parameter()
             ...         self.submodel1 = SubModel1() # Sub class of Model
             ...         self.submodel2 = SubModel2() # Sub class of Model
             ...         self.scan_attributes()
@@ -96,12 +97,12 @@ cdef class Model:
 
             >>> class ParentModel(Model):
             ...     def __init__(self):
-            ...         self.subparam1 = Parameter()
-            ...         self.subparam2 = Parameter()
+            ...         self.param1 = Parameter()
+            ...         self.param2 = Parameter()
             ...         self.submodel1 = SubModel1()
             ...         self.submodel2 = SubModel2()
-            ...         self.add("subparam1", self.subparam1)
-            ...         self.add("subparam2", self.subparam2)
+            ...         self.add("param1", self.param1)
+            ...         self.add("param2", self.param2)
             ...         self.add("submodel1", self.submodel1)
             ...         self.add("submodel2", self.submodel2)
 

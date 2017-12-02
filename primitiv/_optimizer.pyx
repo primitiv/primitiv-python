@@ -175,7 +175,7 @@ cdef class Optimizer:
         E.g., below lines should behave similarly (except the case of exceptions):
 
             >>> opt.add(a, b, c, d)
-            >>> opt.add(a, b); add(c, d)
+            >>> opt.add(a, b); opt.add(c, d)
             >>> opt.add(a); opt.add(b); opt.add(c); opt.add(d)
 
         """
