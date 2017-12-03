@@ -25,8 +25,7 @@ cdef extern from "primitiv/model.h":
 cdef class Model:
     cdef CppModel *wrapped
     cdef object __weakref__
-    cdef object added_parameters
-    cdef object added_submodels
+    cdef object added
     @staticmethod
     cdef void register_wrapper(CppModel *ptr, Model wrapper)
     @staticmethod

@@ -21,8 +21,7 @@ cdef class Model:
     def __cinit__(self):
         self.wrapped = new CppModel()
         Model.register_wrapper(self.wrapped, self)
-        self.added_parameters = []
-        self.added_submodels = []
+        self.added = []
 
     def __dealloc__(self):
         if self.wrapped is not NULL:
@@ -69,12 +68,11 @@ cdef class Model:
         """
         if isinstance(arg, Parameter):
             self.wrapped.add(pystr_to_cppstr(name), (<Parameter> arg).wrapped[0])
-            self.added_parameters.append(arg)
         elif isinstance(arg, Model):
             self.wrapped.add(pystr_to_cppstr(name), (<Model> arg).wrapped[0])
-            self.added_submodels.append(arg)
         else:
             raise TypeError("Argument 'arg' has incorrect type (Parameter or Model)")
+        self.added.append(arg)
 
     def scan_attributes(self):
         """Registers all parameter and model members in this model.
@@ -108,9 +106,9 @@ cdef class Model:
 
         """
         for k, v in self.__dict__.items():
-            if isinstance(v, Parameter) and v not in self.added_parameters:
+            if isinstance(v, Parameter) and v not in self.added:
                 self.add(k, v)
-            if isinstance(v, Model) and v not in self.added_submodels:
+            if isinstance(v, Model) and v not in self.added:
                 self.add(k, v)
 
     def __getitem__(self, key):
