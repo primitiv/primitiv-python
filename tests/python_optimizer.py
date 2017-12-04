@@ -85,10 +85,7 @@ def train_func(optimizer):
     pw2 = Parameter([1, 8], I.XavierUniform())
     pb2 = Parameter([1], I.Constant(0))
 
-    optimizer.add_parameter(pw1)
-    optimizer.add_parameter(pb1)
-    optimizer.add_parameter(pw2)
-    optimizer.add_parameter(pb2)
+    optimizer.add(pw1, pb1, pw2, pb2)
 
     input_data = [1, 1, 1, -1, -1, 1, -1, -1]
     output_data = [1, -1, -1, 1]
@@ -148,7 +145,7 @@ class PythonOptimizerTest(unittest.TestCase):
         dev = D.Naive()
         Device.set_default(dev)
         pw1 = Parameter([8, 2], I.XavierUniform())
-        self.t.add_parameter(pw1)
+        self.t.add(pw1)
         self.assertIn("testadam-m1", pw1.stats)
         self.assertIn("testadam-m2", pw1.stats)
 
@@ -191,7 +188,7 @@ class PythonOptimizerTest(unittest.TestCase):
         optimizer = ExceptionOptimizer()
         p = Parameter()
         with self.assertRaises(TestException) as ctx:
-            optimizer.add_parameter(p)
+            optimizer.add(p)
         self.assertEqual(str(ctx.exception), "configure_parameter")
         with self.assertRaises(TestException) as ctx:
             optimizer.update()
@@ -213,7 +210,7 @@ class PythonOptimizerTest(unittest.TestCase):
         optimizer = IncompleteOptimizer()
         p = Parameter()
         with self.assertRaises(NotImplementedError):
-            optimizer.add_parameter(p)
+            optimizer.add(p)
         with self.assertRaises(NotImplementedError):
             optimizer.update()
         with self.assertRaises(NotImplementedError):
