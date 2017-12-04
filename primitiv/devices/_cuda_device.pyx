@@ -1,7 +1,7 @@
-from primitiv._device cimport _Device
+from primitiv._device cimport Device
 
 
-cdef class CUDA(_Device):
+cdef class CUDA(Device):
 
     def __init__(self, unsigned device_id, rng_seed = None):
         """Creates a new CUDA device.
@@ -19,7 +19,7 @@ cdef class CUDA(_Device):
             self.wrapped = new CppCUDA(device_id)
         else:
             self.wrapped = new CppCUDA(device_id, <unsigned> rng_seed)
-        _Device.register_wrapper(self.wrapped, self)
+        Device.register_wrapper(self.wrapped, self)
 
     def __dealloc__(self):
         if self.wrapped is not NULL:
