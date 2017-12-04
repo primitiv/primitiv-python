@@ -128,8 +128,8 @@ if enable_opencl:
         ext_common_args(
             "primitiv.devices._opencl_device",
             libraries=[
-                "OpenCL",
                 "clBLAS",
+                "OpenCL",
             ],
             sources=["primitiv/devices/_opencl_device.pyx"],
         )
