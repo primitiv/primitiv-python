@@ -26,7 +26,7 @@ if "--bundle-core-library" in sys.argv:
         print("primitiv-core/CMakeLists.txt is not found", file=sys.stderr)
         print("", file=sys.stderr)
         print("Run the following command to download primitiv core library:", file=sys.stderr)
-        print("  git submodule update", file=sys.stderr)
+        print("  git submodule update --init", file=sys.stderr)
         print("", file=sys.stderr)
         sys.exit(1)
     bundle_core_library = True
