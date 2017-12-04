@@ -15,9 +15,9 @@ SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
-if "--no-build-core" in sys.argv:
+if "--no-build-core-library" in sys.argv:
     build_core = False
-    sys.argv.remove("--no-build-core")
+    sys.argv.remove("--no-build-core-library")
 else:
     build_core = os.path.exists(os.path.join(dirname, SUBMODULE_CMAKELIST))
 
