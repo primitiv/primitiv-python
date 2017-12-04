@@ -2,9 +2,11 @@
 
 import os
 import sys
-import numpy as np
 
 from setuptools.extension import Extension
+
+import numpy as np
+
 from Cython.Build import build_ext
 
 
@@ -29,7 +31,8 @@ if "--bundle-core-library" in sys.argv:
     if not build_core:
         print("%s is not found" % SUBMODULE_CMAKELIST, file=sys.stderr)
         print("", file=sys.stderr)
-        print("Run the following command to download primitiv core library:", file=sys.stderr)
+        print("Run the following command to download primitiv core library:",
+              file=sys.stderr)
         print("  git submodule update --init", file=sys.stderr)
         print("", file=sys.stderr)
         sys.exit(1)
@@ -46,14 +49,16 @@ if "--enable-opencl" in sys.argv:
     enable_opencl = True
     sys.argv.remove("--enable-opencl")
 
-def extension_common_args(*args, libraries=[], **kwargs):
+
+def ext_common_args(*args, libraries=[], **kwargs):
     if build_core:
         libs = ["primitiv"]
         libs.extend(libraries)
-        return Extension(*args, **kwargs,
+        return Extension(
+            *args, **kwargs,
             language="c++",
             libraries=libs,
-            library_dirs = ["_skbuild/cmake-install/lib"],
+            library_dirs=["_skbuild/cmake-install/lib"],
             include_dirs=[
                 np.get_include(),
                 "_skbuild/cmake-install/include",
@@ -62,7 +67,8 @@ def extension_common_args(*args, libraries=[], **kwargs):
             extra_compile_args=["-std=c++11"],
         )
     else:
-        return Extension(*args, **kwargs,
+        return Extension(
+            *args, **kwargs,
             language="c++",
             libraries=["primitiv"],
             include_dirs=[
@@ -72,38 +78,39 @@ def extension_common_args(*args, libraries=[], **kwargs):
             extra_compile_args=["-std=c++11"],
         )
 
+
 ext_modules = [
-    extension_common_args("primitiv._shape",
-                          sources=["primitiv/_shape.pyx"]),
-    extension_common_args("primitiv._tensor",
-                          sources=["primitiv/_tensor.pyx"]),
-    extension_common_args("primitiv._device",
-                          sources=["primitiv/_device.pyx"]),
-    extension_common_args("primitiv.devices._naive_device",
-                          sources=["primitiv/devices/_naive_device.pyx"]),
-    extension_common_args("primitiv._parameter",
-                          sources=["primitiv/_parameter.pyx"]),
-    extension_common_args("primitiv._initializer",
-                          sources=["primitiv/_initializer.pyx"]),
-    extension_common_args("primitiv.initializers._initializer_impl",
-                          sources=["primitiv/initializers/_initializer_impl.pyx"]),
-    extension_common_args("primitiv._graph",
-                          sources=["primitiv/_graph.pyx"]),
-    extension_common_args("primitiv._optimizer",
-                          sources=["primitiv/_optimizer.pyx"]),
-    extension_common_args("primitiv.optimizers._optimizer_impl",
-                          sources=["primitiv/optimizers/_optimizer_impl.pyx"]),
-    extension_common_args("primitiv._operator",
-                          sources=["primitiv/_operator.pyx"]),
-    extension_common_args("primitiv._model",
-                          sources=["primitiv/_model.pyx"]),
-    extension_common_args("primitiv.config",
-                          sources=["primitiv/config.pyx"]),
+    ext_common_args("primitiv._shape",
+                    sources=["primitiv/_shape.pyx"]),
+    ext_common_args("primitiv._tensor",
+                    sources=["primitiv/_tensor.pyx"]),
+    ext_common_args("primitiv._device",
+                    sources=["primitiv/_device.pyx"]),
+    ext_common_args("primitiv.devices._naive_device",
+                    sources=["primitiv/devices/_naive_device.pyx"]),
+    ext_common_args("primitiv._parameter",
+                    sources=["primitiv/_parameter.pyx"]),
+    ext_common_args("primitiv._initializer",
+                    sources=["primitiv/_initializer.pyx"]),
+    ext_common_args("primitiv.initializers._initializer_impl",
+                    sources=["primitiv/initializers/_initializer_impl.pyx"]),
+    ext_common_args("primitiv._graph",
+                    sources=["primitiv/_graph.pyx"]),
+    ext_common_args("primitiv._optimizer",
+                    sources=["primitiv/_optimizer.pyx"]),
+    ext_common_args("primitiv.optimizers._optimizer_impl",
+                    sources=["primitiv/optimizers/_optimizer_impl.pyx"]),
+    ext_common_args("primitiv._operator",
+                    sources=["primitiv/_operator.pyx"]),
+    ext_common_args("primitiv._model",
+                    sources=["primitiv/_model.pyx"]),
+    ext_common_args("primitiv.config",
+                    sources=["primitiv/config.pyx"]),
 ]
 
 if enable_cuda:
     ext_modules.append(
-        extension_common_args(
+        ext_common_args(
             "primitiv.devices._cuda_device",
             libraries=[
                 "cudart",
@@ -118,7 +125,7 @@ if enable_cuda:
 
 if enable_opencl:
     ext_modules.append(
-        extension_common_args(
+        ext_common_args(
             "primitiv.devices._opencl_device",
             libraries=[
                 "OpenCL",
@@ -144,15 +151,15 @@ with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
     print("recursive-include primitiv *.pyx *.pxd *.h", file=fp)
     print("exclude primitiv/_optimizer_api.h", file=fp)
     if bundle_core_library:
-        print("recursive-include primitiv-core *", file=fp)
+        print("recursive-include %s *" % SUBMODULE_DIR, file=fp)
 
 setup(
-    name = "primitiv",
-    version = "0.0.1",
-    description = "primitiv: A Neural Network Toolkit. (Python frontend)",
-    url = "https://github.com/odashi/primitiv",
-    author = "Koichi Akabe",
-    author_email = "vbkaisetsu at gmail.com",
+    name="primitiv",
+    version="0.0.1",
+    description="primitiv: A Neural Network Toolkit. (Python frontend)",
+    url="https://github.com/odashi/primitiv",
+    author="Koichi Akabe",
+    author_email="vbkaisetsu at gmail.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -163,9 +170,9 @@ setup(
         "Programming Language :: Python :: 3",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    ext_modules = ext_modules,
+    ext_modules=ext_modules,
     cmdclass={'build_ext': build_ext},
-    packages = [
+    packages=[
         "primitiv",
         "primitiv.devices",
         "primitiv.initializers",
