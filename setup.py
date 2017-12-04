@@ -113,11 +113,11 @@ if enable_cuda:
         ext_common_args(
             "primitiv.devices._cuda_device",
             libraries=[
-                "cudart",
-                "rt",
-                "pthread",
                 "cublas",
+                "cudart",
                 "curand",
+                "pthread",
+                "rt",
             ],
             sources=["primitiv/devices/_cuda_device.pyx"],
         )
