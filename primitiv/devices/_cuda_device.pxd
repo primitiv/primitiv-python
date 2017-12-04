@@ -1,4 +1,4 @@
-from primitiv._device cimport CppDevice, _Device
+from primitiv._device cimport CppDevice, Device
 
 
 cdef extern from "primitiv/cuda_device.h":
@@ -9,5 +9,5 @@ cdef extern from "primitiv/cuda_device.h":
         unsigned num_devices() except +
 
 
-cdef class CUDA(_Device):
+cdef class CUDA(Device):
     pass
