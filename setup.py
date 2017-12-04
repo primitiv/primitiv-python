@@ -7,13 +7,17 @@ import numpy as np
 from setuptools.extension import Extension
 from Cython.Build import build_ext
 
+
+SUBMODULE_DIR = "primitiv-core"
+SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")
+
 dirname = os.path.dirname(os.path.abspath(__file__))
 
 if "--no-build-core" in sys.argv:
     build_core = False
     sys.argv.remove("--no-build-core")
 else:
-    build_core = os.path.exists(os.path.join(dirname, "primitiv-core/CMakeLists.txt"))
+    build_core = os.path.exists(os.path.join(dirname, SUBMODULE_CMAKELIST))
 
 if build_core:
     from skbuild import setup
@@ -23,7 +27,7 @@ else:
 bundle_core_library = False
 if "--bundle-core-library" in sys.argv:
     if not build_core:
-        print("primitiv-core/CMakeLists.txt is not found", file=sys.stderr)
+        print("%s is not found" % SUBMODULE_CMAKELIST, file=sys.stderr)
         print("", file=sys.stderr)
         print("Run the following command to download primitiv core library:", file=sys.stderr)
         print("  git submodule update --init", file=sys.stderr)
@@ -126,7 +130,7 @@ if enable_opencl:
 
 setup_kwargs = {}
 if build_core:
-    setup_kwargs["cmake_source_dir"] = "primitiv-core"
+    setup_kwargs["cmake_source_dir"] = SUBMODULE_DIR
     setup_kwargs["cmake_install_dir"] = "./"
     setup_kwargs["setup_requires"] = ["scikit-build"]
     setup_kwargs["cmake_args"] = ["-DPRIMITIV_BUILD_STATIC_LIBRARY=ON"]
