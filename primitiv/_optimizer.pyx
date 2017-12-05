@@ -182,7 +182,7 @@ cdef class Optimizer:
         for i, arg in enumerate(args):
             if isinstance(arg, Parameter):
                 self.wrapped.add((<Parameter> arg).wrapped[0])
-            elif isinstance(arg, Parameter):
+            elif isinstance(arg, Model):
                 self.wrapped.add((<Model> arg).wrapped[0])
             else:
                 raise TypeError("Argument %d has incorrect type (Parameter or Model)" % (i + 1))
