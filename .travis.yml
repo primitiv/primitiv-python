@@ -1,0 +1,27 @@
+matrix:
+  include:
+    - os: linux
+      env: SCRIPT=ubuntu WITH_CORE_LIBRARY=yes
+      services: docker
+    - os: linux
+      env: SCRIPT=ubuntu
+      services: docker
+    - os: linux
+      env: SCRIPT=debian WITH_CORE_LIBRARY=yes
+      services: docker
+    - os: linux
+      env: SCRIPT=debian
+      services: docker
+    - os: linux
+      env: SCRIPT=fedora WITH_CORE_LIBRARY=yes
+      services: docker
+    - os: linux
+      env: SCRIPT=fedora
+      services: docker
+    - os: osx
+      env: SCRIPT=osx WITH_CORE_LIBRARY=yes
+    - os: osx
+      env: SCRIPT=osx
+
+script:
+  - $TRAVIS_BUILD_DIR/.travis/${SCRIPT}.sh
