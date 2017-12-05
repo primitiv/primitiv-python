@@ -59,10 +59,7 @@ def main():
     pb2 = Parameter([NUM_OUTPUT_UNITS], I.Constant(0), dev1)
 
     optimizer = O.SGD(.1)
-    optimizer.add_parameter(pw1)
-    optimizer.add_parameter(pb1)
-    optimizer.add_parameter(pw2)
-    optimizer.add_parameter(pb2)
+    optimizer.add(pw1, pb1, pw2, pb2)
 
     def make_graph(inputs):
         # We first store input values explicitly on GPU 0.

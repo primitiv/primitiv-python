@@ -25,7 +25,7 @@ class Affine(Model):
     def __init__(self, in_size, out_size):
         self.pw = Parameter([out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pb = Parameter([out_size], I.Constant(0))
-        self.add_all_parameters()
+        self.scan_attributes()
 
     # Initializes internal values.
     def reset(self):
@@ -52,7 +52,7 @@ class LSTM(Model):
         self.pwxh = Parameter([4 * out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pwhh = Parameter([4 * out_size, out_size], I.Uniform(-0.1, 0.1))
         self.pbh = Parameter([4 * out_size], I.Constant(0))
-        self.add_all_parameters()
+        self.scan_attributes()
 
     # Initializes internal values.
     def restart(self):
@@ -82,8 +82,7 @@ class RNNLM(Model):
         self.rnn1 = LSTM(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.rnn2 = LSTM(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.hy = Affine(NUM_HIDDEN_UNITS, vocab_size)
-        self.add_all_parameters()
-        self.add_all_submodels()
+        self.scan_attributes()
 
 
     # Forward function of RNNLM. Input data should be arranged below:
@@ -148,7 +147,7 @@ def main():
     optimizer = O.SGD(1)
     #optimizer.set_weight_decay(1e-6)
     optimizer.set_gradient_clipping(5)
-    optimizer.add_model(lm)
+    optimizer.add(lm)
 
     # Sentence IDs.
     train_ids = list(range(num_train_sents))
