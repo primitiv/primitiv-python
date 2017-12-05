@@ -27,11 +27,11 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     # test installing by "pip install"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py sdist --bundle-core-library"
 
-    docker exec travis-ci bash -c "pip3 install /primitiv-python/dist/primitiv-*.tar.gz --verbose"
+    docker exec travis-ci bash -c "pip3 install /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-opencl"
     docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 
-    docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose"
+    docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-opencl"
     docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 else
