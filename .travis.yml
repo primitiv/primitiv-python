@@ -1,27 +1,70 @@
+language: python
+python: 3.5
+
+stages:
+  - test
+  - deploy
+
 matrix:
   include:
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=ubuntu WITH_CORE_LIBRARY=yes
       services: docker
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=ubuntu
       services: docker
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=debian WITH_CORE_LIBRARY=yes
       services: docker
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=debian
       services: docker
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=fedora WITH_CORE_LIBRARY=yes
       services: docker
-    - os: linux
+    - stage: test
+      os: linux
       env: SCRIPT=fedora
       services: docker
-    - os: osx
+    - stage: test
+      os: osx
       env: SCRIPT=osx WITH_CORE_LIBRARY=yes
-    - os: osx
+    - stage: test
+      os: osx
       env: SCRIPT=osx
+    - if: branch = develop
+      stage: deploy
+      os: linux
+      script:
+        - export PRIMITIV_PYTHON_BUILD_NUMBER="dev${TRAVIS_BUILD_NUMBER}";
+        - pip install cython numpy scikit-build twine
+        - $TRAVIS_BUILD_DIR/setup.py sdist --bundle-core-library
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD $TRAVIS_BUILD_DIR/dist/*.tar.gz
+        on:
+          tags: false
+          branch: develop
+    - if: branch = master
+      stage: deploy
+      os: linux
+      script:
+        - export PRIMITIV_PYTHON_BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}";
+        - pip install cython numpy scikit-build twine
+        - $TRAVIS_BUILD_DIR/setup.py sdist --bundle-core-library
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD $TRAVIS_BUILD_DIR/dist/*.tar.gz
+        on:
+          tags: false
+          branch: master
 
 script:
   - $TRAVIS_BUILD_DIR/.travis/${SCRIPT}.sh
