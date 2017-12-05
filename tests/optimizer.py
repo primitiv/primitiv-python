@@ -12,7 +12,7 @@ class TestModel(Model):
     pass
 
 
-class OptimizerImpl(unittest.TestCase):
+class Optimizer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
