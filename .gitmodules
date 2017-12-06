@@ -1,0 +1,3 @@
+[submodule "primitiv-core"]
+	path = primitiv-core
+	url = https://github.com/primitiv/primitiv.git
