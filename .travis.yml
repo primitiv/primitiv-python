@@ -1,6 +1,3 @@
-language: python
-python: 3.5
-
 stages:
   - test
   - deploy
@@ -40,6 +37,8 @@ matrix:
     - if: branch = develop
       stage: deploy
       os: linux
+      language: python
+      python: 3.5
       script:
         - export PRIMITIV_PYTHON_BUILD_NUMBER="dev${TRAVIS_BUILD_NUMBER}";
         - pip install cython numpy scikit-build twine
@@ -54,6 +53,8 @@ matrix:
     - if: branch = master
       stage: deploy
       os: linux
+      language: python
+      python: 3.5
       script:
         - export PRIMITIV_PYTHON_BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}";
         - pip install cython numpy scikit-build twine
