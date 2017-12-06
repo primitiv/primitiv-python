@@ -9,9 +9,16 @@ import numpy as np
 
 from Cython.Build import build_ext
 
+VERSION = "0.0.2"
 
 SUBMODULE_DIR = "primitiv-core"
 SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")
+
+build_number = os.getenv("PRIMITIV_PYTHON_BUILD_NUMBER")
+if build_number is not None:
+    version_full = VERSION + "." + build_number
+else:
+    version_full = VERSION
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
@@ -155,11 +162,11 @@ with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
 
 setup(
     name="primitiv",
-    version="0.0.1",
+    version=version_full,
     description="primitiv: A Neural Network Toolkit. (Python frontend)",
-    url="https://github.com/odashi/primitiv",
-    author="Koichi Akabe",
-    author_email="vbkaisetsu at gmail.com",
+    url="https://github.com/primitiv/primitiv-python",
+    author="primitiv Developers",
+    author_email="primitiv-developer-group@googlegroups.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
