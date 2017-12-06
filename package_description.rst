@@ -13,12 +13,14 @@ Features
 Install
 -------
 
-Requirements:
+Prerequisites:
 
 - Python 3 (3.5 or later)
 - NumPy (1.11.0 or later)
 - Cython (0.27 or later)
 - scikit-build (0.6.1 or later, only for building)
+- (optional) CUDA (7.5 or later)
+- (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
 
 Install dependencies::
 
