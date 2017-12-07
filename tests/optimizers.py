@@ -5,7 +5,7 @@ import unittest
 import tempfile
 
 
-class OptimizerVirtualFuncTest(unittest.TestCase):
+class Optimizers(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
