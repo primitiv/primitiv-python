@@ -9,7 +9,7 @@ import numpy as np
 
 from Cython.Build import build_ext
 
-VERSION = "0.0.2"
+VERSION = "0.2.0"
 
 SUBMODULE_DIR = "primitiv-core"
 SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")
@@ -154,7 +154,7 @@ if build_core:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_OPENCL=ON")
 
 with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
-    print("include README.md", file=fp)
+    print("include README.md package_description.rst", file=fp)
     print("recursive-include primitiv *.pyx *.pxd *.h", file=fp)
     print("exclude primitiv/_optimizer_api.h", file=fp)
     if bundle_core_library:
@@ -164,8 +164,10 @@ setup(
     name="primitiv",
     version=version_full,
     description="primitiv: A Neural Network Toolkit. (Python frontend)",
+    long_description=open(os.path.join(dirname,
+                                       "package_description.rst")).read(),
     url="https://github.com/primitiv/primitiv-python",
-    author="primitiv Developers",
+    author="primitiv developer group",
     author_email="primitiv-developer-group@googlegroups.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
