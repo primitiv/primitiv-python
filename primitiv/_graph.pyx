@@ -4,7 +4,7 @@ from libcpp.vector cimport vector
 from primitiv._device cimport Device
 from primitiv._shape cimport wrapShape
 from primitiv._tensor cimport Tensor
-from primitiv._operator cimport op_pow, op_ipow, op_matmul
+from primitiv._function cimport func_pow, func_ipow, func_matmul
 from primitiv.config cimport pystr_to_cppstr, cppstr_to_pystr
 
 from weakref import WeakValueDictionary
@@ -50,17 +50,17 @@ cdef class Node:
         """
         return Graph.get_wrapper(&self.wrapped.graph())
 
-    def function_id(self):
-        """Returns the function ID.
+    def operator_id(self):
+        """Returns the operator ID.
 
-        :return: Function ID.
+        :return: Operator ID.
         :rtype: int
 
         """
-        return self.wrapped.function_id()
+        return self.wrapped.operator_id()
 
     def value_id(self):
-        """Returns the value ID of the function.
+        """Returns the value ID of the operator.
 
         :return: Value ID.
         :rtype: int
@@ -180,54 +180,54 @@ cdef class Node:
             self.wrapped.backward()
 
     def __pos__(self):
-        return wrapNode(op_node_pos(self.wrapped))
+        return wrapNode(func_node_pos(self.wrapped))
 
     def __neg__(self):
-        return wrapNode(op_node_neg(self.wrapped))
+        return wrapNode(func_node_neg(self.wrapped))
 
     def __add__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(op_node_add((<Node> left).wrapped, <float> right))
+            return wrapNode(func_node_add((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(op_node_add(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_node_add(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_node_add((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_node_add((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __sub__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(op_node_sub((<Node> left).wrapped, <float> right))
+            return wrapNode(func_node_sub((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(op_node_sub(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_node_sub(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_node_sub((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_node_sub((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __mul__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(op_node_mul((<Node> left).wrapped, <float> right))
+            return wrapNode(func_node_mul((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(op_node_mul(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_node_mul(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_node_mul((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_node_mul((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __matmul__(left, right):
         if isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_matmul((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_matmul((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __truediv__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(op_node_div((<Node> left).wrapped, <float> right))
+            return wrapNode(func_node_div((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(op_node_div(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_node_div(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_node_div((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_node_div((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
@@ -235,13 +235,13 @@ cdef class Node:
         if mod is not None:
             return NotImplemented
         if isinstance(right, int) and -0x80000000 <= right <= 0x7fffffff:
-            return wrapNode(op_ipow((<Node> left).wrapped, <int> right))
+            return wrapNode(func_ipow((<Node> left).wrapped, <int> right))
         elif isinstance(right, (int, float)):
-            return wrapNode(op_pow((<Node> left).wrapped, <float> right))
+            return wrapNode(func_pow((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(op_pow(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_pow(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(op_pow((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_pow((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
@@ -373,14 +373,14 @@ cdef class Graph:
         """
         return cppstr_to_pystr(self.wrapped.dump(pystr_to_cppstr(fmt)))
 
-    def num_functions(self):
-        """Returns the number of functions in the computation graph.
+    def num_operators(self):
+        """Returns the number of operators in the computation graph.
 
         :return: Number of nodes.
         :rtype: int
 
         """
-        return self.wrapped.num_functions()
+        return self.wrapped.num_operators()
 
     def __copy__(self):
         raise NotImplementedError(type(self).__name__ + " does not support `__copy__` for now.")

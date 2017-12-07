@@ -12,7 +12,7 @@ cdef extern from "primitiv/graph.h" nogil:
         CppNode() except +
         bool valid() except +
         CppGraph &graph() except +
-        unsigned function_id() except +
+        unsigned operator_id() except +
         unsigned value_id() except +
         const CppShape &shape() except +
         CppDevice &device() except +
@@ -23,21 +23,21 @@ cdef extern from "primitiv/graph.h" nogil:
         void backward() except +
 
 
-cdef extern from "node_op.h" namespace "python_primitiv_node":
-    cdef CppNode op_node_pos(const CppNode &x) except +
-    cdef CppNode op_node_neg(const CppNode &x) except +
-    cdef CppNode op_node_add(const CppNode &x, float k) except +
-    cdef CppNode op_node_add(float k, const CppNode &x) except +
-    cdef CppNode op_node_add(const CppNode &a, const CppNode &b) except +
-    cdef CppNode op_node_sub(const CppNode &x, float k) except +
-    cdef CppNode op_node_sub(float k, const CppNode &x) except +
-    cdef CppNode op_node_sub(const CppNode &a, const CppNode &b) except +
-    cdef CppNode op_node_mul(const CppNode &x, float k) except +
-    cdef CppNode op_node_mul(float k, const CppNode &x) except +
-    cdef CppNode op_node_mul(const CppNode &a, const CppNode &b) except +
-    cdef CppNode op_node_div(const CppNode &x, float k) except +
-    cdef CppNode op_node_div(float k, const CppNode &x) except +
-    cdef CppNode op_node_div(const CppNode &a, const CppNode &b) except +
+cdef extern from "node_func.h" namespace "python_primitiv_node":
+    cdef CppNode func_node_pos(const CppNode &x) except +
+    cdef CppNode func_node_neg(const CppNode &x) except +
+    cdef CppNode func_node_add(const CppNode &x, float k) except +
+    cdef CppNode func_node_add(float k, const CppNode &x) except +
+    cdef CppNode func_node_add(const CppNode &a, const CppNode &b) except +
+    cdef CppNode func_node_sub(const CppNode &x, float k) except +
+    cdef CppNode func_node_sub(float k, const CppNode &x) except +
+    cdef CppNode func_node_sub(const CppNode &a, const CppNode &b) except +
+    cdef CppNode func_node_mul(const CppNode &x, float k) except +
+    cdef CppNode func_node_mul(float k, const CppNode &x) except +
+    cdef CppNode func_node_mul(const CppNode &a, const CppNode &b) except +
+    cdef CppNode func_node_div(const CppNode &x, float k) except +
+    cdef CppNode func_node_div(float k, const CppNode &x) except +
+    cdef CppNode func_node_div(const CppNode &a, const CppNode &b) except +
 
 
 cdef extern from "primitiv/graph.h" nogil:
@@ -53,7 +53,7 @@ cdef extern from "primitiv/graph.h" nogil:
         const CppShape &get_shape(const CppNode &node) except +
         CppDevice &get_device(const CppNode &node) except +
         string dump(const string &format) except +
-        unsigned num_functions() except +
+        unsigned num_operators() except +
 
 
 cdef class Node:

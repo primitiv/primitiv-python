@@ -3,7 +3,7 @@ from libcpp.vector cimport vector
 
 from primitiv._device cimport Device
 from primitiv._shape cimport Shape, wrapShape, normShape
-from primitiv._operator cimport op_pow, op_ipow, op_matmul
+from primitiv._function cimport func_pow, func_ipow, func_matmul
 
 from weakref import WeakValueDictionary
 
@@ -201,54 +201,54 @@ cdef class Tensor:
         return Tensor.get_wrapper_with_new(new CppTensor(self.wrapped.flatten()))
 
     def __pos__(self):
-        return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_pos(self.wrapped[0])))
+        return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_pos(self.wrapped[0])))
 
     def __neg__(self):
-        return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_neg(self.wrapped[0])))
+        return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_neg(self.wrapped[0])))
 
     def __add__(left, right):
         if isinstance(right, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_add((<Tensor> left).wrapped[0], <float> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_add((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_add(<float> left, (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_add(<float> left, (<Tensor> right).wrapped[0])))
         elif isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_add((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_add((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
     def __sub__(left, right):
         if isinstance(right, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_sub((<Tensor> left).wrapped[0], <float> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_sub((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_sub(<float> left, (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_sub(<float> left, (<Tensor> right).wrapped[0])))
         elif isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_sub((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_sub((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
     def __mul__(left, right):
         if isinstance(right, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_mul((<Tensor> left).wrapped[0], <float> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_mul((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_mul(<float> left, (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_mul(<float> left, (<Tensor> right).wrapped[0])))
         elif isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_mul((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_mul((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
     def __matmul__(left, right):
         if isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_matmul((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_matmul((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
     def __truediv__(left, right):
         if isinstance(right, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_div((<Tensor> left).wrapped[0], <float> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_div((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_div(<float> left, (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_div(<float> left, (<Tensor> right).wrapped[0])))
         elif isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_tensor_div((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_tensor_div((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
@@ -256,26 +256,26 @@ cdef class Tensor:
         if mod is not None:
             return NotImplemented
         if isinstance(right, int) and -0x80000000 <= right <= 0x7fffffff:
-            return Tensor.get_wrapper_with_new(new CppTensor(op_ipow((<Tensor> left).wrapped[0], <int> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_ipow((<Tensor> left).wrapped[0], <int> right)))
         elif isinstance(right, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_pow((<Tensor> left).wrapped[0], <float> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_pow((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_pow(<float> left, (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_pow(<float> left, (<Tensor> right).wrapped[0])))
         elif isinstance(left, Tensor) and isinstance(right, Tensor):
-            return Tensor.get_wrapper_with_new(new CppTensor(op_pow((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_pow((<Tensor> left).wrapped[0], (<Tensor> right).wrapped[0])))
         else:
             return NotImplemented
 
     def __imul__(self, float k):
-        op_tensor_imul(self.wrapped[0], k)
+        func_tensor_imul(self.wrapped[0], k)
         return self
 
     def __iadd__(self, Tensor x):
-        op_tensor_iadd(self.wrapped[0], x.wrapped[0])
+        func_tensor_iadd(self.wrapped[0], x.wrapped[0])
         return self
 
     def __isub__(self, Tensor x):
-        op_tensor_isub(self.wrapped[0], x.wrapped[0])
+        func_tensor_isub(self.wrapped[0], x.wrapped[0])
         return self
 
     def __copy__(self):
