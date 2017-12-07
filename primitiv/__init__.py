@@ -10,8 +10,8 @@ from primitiv._optimizer import Optimizer
 
 from primitiv import devices
 from primitiv import initializers
-from primitiv._operator import operators
-from primitiv._operator import tensor_operators
+from primitiv._function import functions
+from primitiv._function import tensor_functions
 from primitiv import optimizers
 from primitiv import config
 
@@ -35,8 +35,8 @@ __all__ = [
 
     "devices",
     "initializers",
-    "operators",
-    "tensor_operators",
+    "functions",
+    "tensor_functions",
     "optimizers",
     "config",
 ]

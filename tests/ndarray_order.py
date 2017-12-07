@@ -1,6 +1,6 @@
 from primitiv import Device
 from primitiv import Graph
-from primitiv import operators as F
+from primitiv import functions as F
 from primitiv.devices import Naive
 
 import numpy as np

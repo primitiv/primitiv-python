@@ -10,7 +10,7 @@
 from primitiv import Model
 from primitiv import Node
 from primitiv import Parameter
-from primitiv import operators as F
+from primitiv import functions as F
 from primitiv import initializers as I
 
 

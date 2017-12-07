@@ -4,8 +4,8 @@ from primitiv import Parameter
 from primitiv import Shape
 from primitiv import Tensor
 from primitiv import initializers as I
-from primitiv import operators as F
-from primitiv import tensor_operators as tF
+from primitiv import functions as F
+from primitiv import tensor_functions as tF
 from primitiv.devices import Naive
 
 import numpy as np

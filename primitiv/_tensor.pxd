@@ -24,24 +24,24 @@ cdef extern from "primitiv/tensor.h" nogil:
         CppTensor flatten() except +
 
 
-cdef extern from "tensor_op.h" namespace "python_primitiv_tensor":
-    cdef CppTensor op_tensor_pos(const CppTensor &x) except +
-    cdef CppTensor op_tensor_neg(const CppTensor &x) except +
-    cdef CppTensor op_tensor_add(const CppTensor &x, float k) except +
-    cdef CppTensor op_tensor_add(float k, const CppTensor &x) except +
-    cdef CppTensor op_tensor_add(const CppTensor &a, const CppTensor &b) except +
-    cdef CppTensor op_tensor_sub(const CppTensor &x, float k) except +
-    cdef CppTensor op_tensor_sub(float k, const CppTensor &x) except +
-    cdef CppTensor op_tensor_sub(const CppTensor &a, const CppTensor &b) except +
-    cdef CppTensor op_tensor_mul(const CppTensor &x, float k) except +
-    cdef CppTensor op_tensor_mul(float k, const CppTensor &x) except +
-    cdef CppTensor op_tensor_mul(const CppTensor &a, const CppTensor &b) except +
-    cdef CppTensor op_tensor_div(const CppTensor &x, float k) except +
-    cdef CppTensor op_tensor_div(float k, const CppTensor &x) except +
-    cdef CppTensor op_tensor_div(const CppTensor &a, const CppTensor &b) except +
-    cdef void op_tensor_imul(CppTensor &tensor, float k) except +
-    cdef void op_tensor_iadd(CppTensor &tensor, const CppTensor &x) except +
-    cdef void op_tensor_isub(CppTensor &tensor, const CppTensor &x) except +
+cdef extern from "tensor_func.h" namespace "python_primitiv_tensor":
+    cdef CppTensor func_tensor_pos(const CppTensor &x) except +
+    cdef CppTensor func_tensor_neg(const CppTensor &x) except +
+    cdef CppTensor func_tensor_add(const CppTensor &x, float k) except +
+    cdef CppTensor func_tensor_add(float k, const CppTensor &x) except +
+    cdef CppTensor func_tensor_add(const CppTensor &a, const CppTensor &b) except +
+    cdef CppTensor func_tensor_sub(const CppTensor &x, float k) except +
+    cdef CppTensor func_tensor_sub(float k, const CppTensor &x) except +
+    cdef CppTensor func_tensor_sub(const CppTensor &a, const CppTensor &b) except +
+    cdef CppTensor func_tensor_mul(const CppTensor &x, float k) except +
+    cdef CppTensor func_tensor_mul(float k, const CppTensor &x) except +
+    cdef CppTensor func_tensor_mul(const CppTensor &a, const CppTensor &b) except +
+    cdef CppTensor func_tensor_div(const CppTensor &x, float k) except +
+    cdef CppTensor func_tensor_div(float k, const CppTensor &x) except +
+    cdef CppTensor func_tensor_div(const CppTensor &a, const CppTensor &b) except +
+    cdef void func_tensor_imul(CppTensor &tensor, float k) except +
+    cdef void func_tensor_iadd(CppTensor &tensor, const CppTensor &x) except +
+    cdef void func_tensor_isub(CppTensor &tensor, const CppTensor &x) except +
 
 
 cdef class Tensor:
