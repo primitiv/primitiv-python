@@ -5,7 +5,7 @@ import sys
 import math
 
 from primitiv import initializers as I
-from primitiv import operators as F
+from primitiv import functions as F
 from primitiv import devices as D
 from primitiv import optimizers as O
 from primitiv import Device, Graph, Model, Parameter, Shape

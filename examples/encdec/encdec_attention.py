@@ -10,7 +10,7 @@ import numpy as np
 from primitiv import Device, Graph, Model, Parameter, Optimizer
 
 from primitiv import devices as D
-from primitiv import operators as F
+from primitiv import functions as F
 from primitiv import initializers as I
 from primitiv import optimizers as O
 
