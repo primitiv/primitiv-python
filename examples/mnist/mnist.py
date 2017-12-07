@@ -67,10 +67,7 @@ def main():
     pb2 = Parameter([NUM_OUTPUT_UNITS], I.Constant(0))
 
     optimizer = O.SGD(.5)
-    optimizer.add_parameter(pw1)
-    optimizer.add_parameter(pb1)
-    optimizer.add_parameter(pw2)
-    optimizer.add_parameter(pb2)
+    optimizer.add(pw1, pb1, pw2, pb2)
 
     def make_graph(inputs, train):
         x = F.input(inputs)

@@ -52,8 +52,7 @@ class EncoderDecoder(Model):
         self.pby = Parameter()
         self.src_lstm = LSTM()
         self.trg_lstm = LSTM()
-        self.add_all_parameters()
-        self.add_all_submodels()
+        self.scan_attributes()
 
     def init(self, src_vocab_size, trg_vocab_size, embed_size, hidden_size):
         """Creates a new EncoderDecoder object."""
@@ -99,7 +98,7 @@ class EncoderDecoder(Model):
 
 def train(encdec, optimizer, prefix, best_valid_ppl):
     # Registers all parameters to the optimizer.
-    optimizer.add_model(encdec)
+    optimizer.add(encdec)
 
     # Loads vocab.
     src_vocab = make_vocab(SRC_TRAIN_FILE, SRC_VOCAB_SIZE)

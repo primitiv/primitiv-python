@@ -24,7 +24,7 @@ class RNNLM(Model):
         self.pwlookup = Parameter([NUM_HIDDEN_UNITS, vocab_size], I.XavierUniform())
         self.pwxs = Parameter([NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS], I.XavierUniform())
         self.pwsy = Parameter([vocab_size, NUM_HIDDEN_UNITS], I.XavierUniform())
-        self.add_all_parameters()
+        self.scan_attributes()
 
     # Forward function of RNNLM. Input data should be arranged below:
     # inputs = {
@@ -83,7 +83,7 @@ def main():
     optimizer = O.Adam()
     optimizer.set_weight_decay(1e-6)
     optimizer.set_gradient_clipping(5)
-    optimizer.add_model(lm)
+    optimizer.add(lm)
 
     # Sentence IDs.
     train_ids = list(range(num_train_sents))

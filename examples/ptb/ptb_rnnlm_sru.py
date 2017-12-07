@@ -25,7 +25,7 @@ class Affine(Model):
     def __init__(self, in_size, out_size):
         self.pw = Parameter([out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pb = Parameter([out_size], I.Constant(0))
-        self.add_all_parameters()
+        self.scan_attributes()
 
     # Initializes internal values.
     def reset(self):
@@ -51,7 +51,7 @@ class SRU(Model):
         self.pw = Parameter([3 * out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pbf = Parameter([out_size], I.Constant(0))
         self.pbr = Parameter([out_size], I.Constant(0))
-        self.add_all_parameters()
+        self.scan_attributes()
 
     # Initializes internal values.
     def restart(self):
@@ -91,8 +91,7 @@ class RNNLM(Model):
         self.rnn1 = SRU(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.rnn2 = SRU(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.hy = Affine(NUM_HIDDEN_UNITS, vocab_size)
-        self.add_all_parameters()
-        self.add_all_submodels()
+        self.scan_attributes()
 
     # Forward function of RNNLM. Input data should be arranged below:
     # inputs = {
@@ -155,7 +154,7 @@ def main():
     optimizer = O.SGD(1)
     #optimizer.set_weight_decay(1e-6)
     optimizer.set_gradient_clipping(5)
-    optimizer.add_model(lm)
+    optimizer.add(lm)
 
     # Sentence IDs.
     train_ids = list(range(num_train_sents))
