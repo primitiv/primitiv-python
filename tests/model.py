@@ -1,7 +1,7 @@
 from primitiv import Parameter, Device, Model, Shape
 from primitiv import devices as D
 from primitiv import initializers as I
-from primitiv import tensor_operators as tF
+from primitiv import tensor_functions as tF
 
 import numpy as np
 

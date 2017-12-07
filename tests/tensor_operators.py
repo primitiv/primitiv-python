@@ -1,5 +1,5 @@
 from primitiv import Device
-from primitiv import tensor_operators as tF
+from primitiv import tensor_functions as tF
 from primitiv.devices import Naive
 
 import numpy as np

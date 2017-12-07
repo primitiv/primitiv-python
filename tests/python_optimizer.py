@@ -2,8 +2,8 @@ from primitiv import optimizers as O
 from primitiv import Optimizer, Parameter, Device, Graph, Shape
 from primitiv import initializers as I
 from primitiv import devices as D
-from primitiv import operators as F
-from primitiv import tensor_operators as tF
+from primitiv import functions as F
+from primitiv import tensor_functions as tF
 
 import unittest
 import tempfile
