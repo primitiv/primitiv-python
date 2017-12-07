@@ -211,6 +211,10 @@ class functions:
             raise TypeError("`t` has incorrect type.")
 
     @staticmethod
+    def stop_gradient(Node x):
+        return wrapNode(func_stop_gradient(x.wrapped))
+
+    @staticmethod
     def constant(shape, float k, Device device = None, Graph g = None):
         if device is None:
             device = Device.get_default()
@@ -499,6 +503,10 @@ class tensor_functions:
             return Tensor.get_wrapper_with_new(new CppTensor(func_softmax_cross_entropy(x.wrapped[0], <vector[unsigned]> t, dim)))
         else:
             raise TypeError("`t` has incorrect type.")
+
+    @staticmethod
+    def stop_gradient(Tensor x):
+        return Tensor.get_wrapper_with_new(new CppTensor(func_stop_gradient(x.wrapped[0])))
 
     @staticmethod
     def constant(shape, float k, Device device = None):

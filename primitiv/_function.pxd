@@ -60,6 +60,7 @@ cdef extern from "primitiv/functions.h":
     Var func_softmax "primitiv::functions::softmax" [Var](const Var &x, unsigned dim) except +
     Var func_softmax_cross_entropy "primitiv::functions::softmax_cross_entropy" [Var](const Var &x, const Var &t, unsigned dim) except +
     Var func_softmax_cross_entropy "primitiv::functions::softmax_cross_entropy" [Var](const Var &x, const vector[unsigned] &ids, unsigned dim) except +
+    Var func_stop_gradient "primitiv::functions::stop_gradient" [Var](const Var &x) except +
     CppNode func_constant "primitiv::functions::constant" (const CppShape &shape, float k, CppDevice &dev, CppGraph &g) except +
     CppNode func_zeros "primitiv::functions::zeros" (const CppShape &shape, CppDevice &dev, CppGraph &g) except +
     CppNode func_ones "primitiv::functions::ones" (const CppShape &shape, CppDevice &dev, CppGraph &g) except +
