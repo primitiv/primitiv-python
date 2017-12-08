@@ -47,7 +47,7 @@ class ArgumentTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_operators_input_argument(self):
+    def test_functions_input_argument(self):
         # list[ndarray] w/o shape
         x = F.input(self.ndarray_data)
         self.assertEqual(x.to_list(), self.list_data)
