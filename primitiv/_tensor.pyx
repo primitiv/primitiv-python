@@ -122,7 +122,7 @@ cdef class Tensor:
             vec = self.wrapped.to_vector()
         output = []
         for j in range(s.batch()):
-            output_item = np.empty([s[i] for i in range(s.depth())], dtype=np.float32, order="F")
+            output_item = np.empty(s.dims(), dtype=np.float32, order="F")
             np_data = <np.float32_t*> output_item.data
             with nogil:
                 for i in range(volume):

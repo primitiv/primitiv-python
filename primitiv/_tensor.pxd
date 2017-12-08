@@ -11,7 +11,7 @@ cdef extern from "primitiv/tensor.h" nogil:
         CppTensor() except +
         bool valid() except +
         CppShape shape() except +
-        CppDevice &device()
+        CppDevice &device() except +
         const void *data() except +
         float to_float() except +
         vector[float] to_vector() except +
