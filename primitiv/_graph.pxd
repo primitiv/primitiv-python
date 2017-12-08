@@ -14,7 +14,7 @@ cdef extern from "primitiv/graph.h" nogil:
         CppGraph &graph() except +
         unsigned operator_id() except +
         unsigned value_id() except +
-        const CppShape &shape() except +
+        CppShape shape() except +
         CppDevice &device() except +
         float to_float() except +
         vector[float] to_vector() except +
@@ -50,7 +50,7 @@ cdef extern from "primitiv/graph.h" nogil:
         void clear() except +
         const CppTensor &forward(const CppNode &node) except +
         void backward(const CppNode &node) except +
-        const CppShape &get_shape(const CppNode &node) except +
+        CppShape get_shape(const CppNode &node) except +
         CppDevice &get_device(const CppNode &node) except +
         string dump(const string &format) except +
         unsigned num_operators() except +

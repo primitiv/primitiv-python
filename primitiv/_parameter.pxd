@@ -22,7 +22,7 @@ cdef extern from "primitiv/parameter.h":
         void reset_gradient() except +
         void add_stats(const string &name, const CppShape &shape) except +
         bool has_stats(const string &name) except +
-        const CppShape &shape() except +
+        CppShape shape() except +
         CppDevice &device() except +
         CppTensor &value() except +
         CppTensor &gradient() except +
