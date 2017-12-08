@@ -4,7 +4,7 @@ from primitiv import initializers as I
 from primitiv import Model
 from primitiv import optimizers as O
 from primitiv import Parameter
-from primitiv import tensor_operators as tF
+from primitiv import tensor_functions as tF
 
 import unittest
 
