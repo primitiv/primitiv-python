@@ -39,9 +39,10 @@ cdef class Model:
         :type device: bool or None
 
         """
-        if device is None:
-            device = Device.get_default()
-        self.wrapped.load(pystr_to_cppstr(path), with_stats, device.wrapped[0])
+        if device is not None:
+            self.wrapped.load(pystr_to_cppstr(path), with_stats, device.wrapped[0])
+        else:
+            self.wrapped.load(pystr_to_cppstr(path), with_stats)
 
     def save(self, str path, bool with_stats = True):
         """Saves all parameters to a file.

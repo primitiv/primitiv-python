@@ -81,9 +81,10 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
-        if device is None:
-            device = Device.get_default()
-        self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0], device.wrapped[0])
+        if device is not None:
+            self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0], device.wrapped[0])
+        else:
+            self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0])
 
     def load(self, str path, bool with_stats = True, Device device = None):
         """Loads parameters from specified file.
@@ -97,9 +98,10 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
-        if device is None:
-            device = Device.get_default()
-        self.wrapped.load(pystr_to_cppstr(path), with_stats, device.wrapped[0])
+        if device is not None:
+            self.wrapped.load(pystr_to_cppstr(path), with_stats, device.wrapped[0])
+        else:
+            self.wrapped.load(pystr_to_cppstr(path), with_stats)
         return
 
     def save(self, str path, bool with_stats = True):

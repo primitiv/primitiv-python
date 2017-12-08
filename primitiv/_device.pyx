@@ -17,17 +17,6 @@ cdef class Device:
     """
 
     @staticmethod
-    def get_default():
-        """Retrieves the current default device.
-
-        :return: Reference of the current default device.
-        :rtype: primitiv.Device
-        :raises RuntimeError: if the default device is null.
-
-        """
-        return Device.get_wrapper(&CppDevice.get_default())
-
-    @staticmethod
     def set_default(Device dev):
         """Specifies a new default device.
 

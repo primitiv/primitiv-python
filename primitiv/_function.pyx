@@ -17,12 +17,13 @@ class functions:
 
     @staticmethod
     def raw_input(shape, vector[float] data, Device device = None, Graph g = None):
-        if device is None:
-            device = Device.get_default()
+        cdef CppDevice *dev_p = NULL
+        cdef CppGraph *g_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
         if g is not None:
-            return wrapNode(Node_input_vector(normShape(shape).wrapped, data, device.wrapped[0], g.wrapped[0]))
-        else:
-            return wrapNode(Node_input_vector(normShape(shape).wrapped, data, device.wrapped[0]))
+            g_p = g.wrapped
+        return wrapNode(func_input_node(normShape(shape).wrapped, data, dev_p, g_p))
 
     # NOTE(vbkaisetsu)
     # This function takes an np.ndarray or a list of np.ndarray
@@ -51,16 +52,17 @@ class functions:
 
     @staticmethod
     def parameter(Parameter param, Graph g = None):
+        cdef CppGraph *g_p = NULL
         if g is not None:
-            return wrapNode(Node_parameter(param.wrapped[0], g.wrapped[0]))
-        else:
-            return wrapNode(Node_parameter(param.wrapped[0]))
+            g_p = g.wrapped
+        return wrapNode(func_parameter_node(param.wrapped[0], g_p))
 
     @staticmethod
     def copy(Node x, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return wrapNode(func_copy(x.wrapped, device.wrapped[0]))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return wrapNode(func_copy(x.wrapped, dev_p))
 
     @staticmethod
     def pick(Node x, vector[unsigned] ids, unsigned dim):
@@ -212,39 +214,43 @@ class functions:
 
     @staticmethod
     def constant(shape, float k, Device device = None, Graph g = None):
-        if device is None:
-            device = Device.get_default()
-        if g is None:
-            return wrapNode(func_constant[CppNode](normShape(shape).wrapped, k, device.wrapped[0]))
-        else:
-            return wrapNode(func_constant(normShape(shape).wrapped, k, device.wrapped[0], g.wrapped[0]))
+        cdef CppDevice *dev_p = NULL
+        cdef CppGraph *g_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        if device is not None:
+            g_p = g.wrapped
+        return wrapNode(func_constant_node(normShape(shape).wrapped, k, dev_p, g_p))
 
     @staticmethod
     def zeros(shape, Device device = None, Graph g = None):
-        if device is None:
-            device = Device.get_default()
-        if g is None:
-            return wrapNode(func_zeros[CppNode](normShape(shape).wrapped, device.wrapped[0]))
-        else:
-            return wrapNode(func_zeros(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
+        cdef CppDevice *dev_p = NULL
+        cdef CppGraph *g_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        if g is not None:
+            g_p = g.wrapped
+        return wrapNode(func_zeros_node(normShape(shape).wrapped, dev_p, g_p))
 
     @staticmethod
     def ones(shape, Device device = None, Graph g = None):
-        if device is None:
-            device = Device.get_default()
-        if g is None:
-            return wrapNode(func_ones[CppNode](normShape(shape).wrapped, device.wrapped[0]))
-        else:
-            return wrapNode(func_ones(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
+        cdef CppDevice *dev_p = NULL
+        cdef CppGraph *g_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        if g is not None:
+            g_p = g.wrapped
+        return wrapNode(func_ones_node(normShape(shape).wrapped, dev_p, g_p))
 
     @staticmethod
     def identity(unsigned size, Device device = None, Graph g = None):
-        if device is None:
-            device = Device.get_default()
-        if g is None:
-            return wrapNode(func_identity[CppNode](size, device.wrapped[0]))
-        else:
-            return wrapNode(func_identity(size, device.wrapped[0], g.wrapped[0]))
+        cdef CppDevice *dev_p = NULL
+        cdef CppGraph *g_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        if g is not None:
+            g_p = g.wrapped
+        return wrapNode(func_identity_node(size, dev_p, g_p))
 
     class batch:
         @staticmethod
@@ -262,48 +268,53 @@ class functions:
     class random:
         @staticmethod
         def bernoulli(shape, float p, Device device = None, Graph g = None):
-            if device is None:
-                device = Device.get_default()
-            if g is None:
-                return wrapNode(func_random_bernoulli[CppNode](normShape(shape).wrapped, p, device.wrapped[0]))
-            else:
-                return wrapNode(func_random_bernoulli(normShape(shape).wrapped, p, device.wrapped[0], g.wrapped[0]))
+            cdef CppDevice *dev_p = NULL
+            cdef CppGraph *g_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            if g is not None:
+                g_p = g.wrapped
+            return wrapNode(func_random_bernoulli_node(normShape(shape).wrapped, p, dev_p, g_p))
 
         @staticmethod
         def uniform(shape, float lower, float upper, Device device = None, Graph g = None):
-            if device is None:
-                device = Device.get_default()
-            if g is None:
-                return wrapNode(func_random_uniform[CppNode](normShape(shape).wrapped, lower, upper, device.wrapped[0]))
-            else:
-                return wrapNode(func_random_uniform(normShape(shape).wrapped, lower, upper, device.wrapped[0], g.wrapped[0]))
+            cdef CppDevice *dev_p = NULL
+            cdef CppGraph *g_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            if g is not None:
+                g_p = g.wrapped
+            return wrapNode(func_random_uniform_node(normShape(shape).wrapped, lower, upper, dev_p, g_p))
 
         @staticmethod
         def normal(shape, float mean, float sd, Device device = None, Graph g = None):
-            if device is None:
-                device = Device.get_default()
-            if g is None:
-                return wrapNode(func_random_normal[CppNode](normShape(shape).wrapped, mean, sd, device.wrapped[0]))
-            else:
-                return wrapNode(func_random_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
+            cdef CppDevice *dev_p = NULL
+            cdef CppGraph *g_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            if g is not None:
+                g_p = g.wrapped
+            return wrapNode(func_random_normal_node(normShape(shape).wrapped, mean, sd, dev_p, g_p))
 
         @staticmethod
         def log_normal(shape, float mean, float sd, Device device = None, Graph g = None):
-            if device is None:
-                device = Device.get_default()
-            if g is None:
-                return wrapNode(func_random_log_normal[CppNode](normShape(shape).wrapped, mean, sd, device.wrapped[0]))
-            else:
-                return wrapNode(func_random_log_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
+            cdef CppDevice *dev_p = NULL
+            cdef CppGraph *g_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            if g is not None:
+                g_p = g.wrapped
+            return wrapNode(func_random_log_normal_node(normShape(shape).wrapped, mean, sd, dev_p, g_p))
 
         @staticmethod
         def gumbel(shape, float mu, float beta, Device device = None, Graph g = None):
-            if device is None:
-                device = Device.get_default()
-            if g is None:
-                return wrapNode(func_random_gumbel[CppNode](normShape(shape).wrapped, mu, beta, device.wrapped[0]))
-            else:
-                return wrapNode(func_random_gumbel(normShape(shape).wrapped, mu, beta, device.wrapped[0], g.wrapped[0]))
+            cdef CppDevice *dev_p = NULL
+            cdef CppGraph *g_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            if g is not None:
+                g_p = g.wrapped
+            return wrapNode(func_random_gumbel_node(normShape(shape).wrapped, mu, beta, dev_p, g_p))
 
     @staticmethod
     def dropout(Node x, float rate, bool enabled):
@@ -314,9 +325,10 @@ class tensor_functions:
 
     @staticmethod
     def raw_input(shape, vector[float] data, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(Tensor_input_vector(normShape(shape).wrapped, data, device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_input_tensor(normShape(shape).wrapped, data, dev_p)))
 
     # NOTE(vbkaisetsu)
     # This function takes an np.ndarray or a list of np.ndarray
@@ -344,13 +356,14 @@ class tensor_functions:
 
     @staticmethod
     def parameter(Parameter param):
-        return Tensor.get_wrapper_with_new(new CppTensor(Tensor_parameter(param.wrapped[0])))
+        return Tensor.get_wrapper_with_new(new CppTensor(func_parameter_tensor(param.wrapped[0])))
 
     @staticmethod
     def copy(Tensor x, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_copy(x.wrapped[0], device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_copy(x.wrapped[0], dev_p)))
 
     @staticmethod
     def pick(Tensor x, vector[unsigned] ids, unsigned dim):
@@ -502,27 +515,31 @@ class tensor_functions:
 
     @staticmethod
     def constant(shape, float k, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_constant[CppTensor](normShape(shape).wrapped, k, device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_constant_tensor(normShape(shape).wrapped, k, dev_p)))
 
     @staticmethod
     def zeros(shape, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_zeros[CppTensor](normShape(shape).wrapped, device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_zeros_tensor(normShape(shape).wrapped, dev_p)))
 
     @staticmethod
     def ones(shape, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_ones[CppTensor](normShape(shape).wrapped, device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_ones_tensor(normShape(shape).wrapped, dev_p)))
 
     @staticmethod
     def identity(unsigned size, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_identity[CppTensor](size, device.wrapped[0])))
+        cdef CppDevice *dev_p = NULL
+        if device is not None:
+            dev_p = device.wrapped
+        return Tensor.get_wrapper_with_new(new CppTensor(func_identity_tensor(size, dev_p)))
 
     class batch:
         @staticmethod
@@ -540,33 +557,38 @@ class tensor_functions:
     class random:
         @staticmethod
         def bernoulli(shape, float p, Device device = None):
-            if device is None:
-                device = Device.get_default()
-            return Tensor.get_wrapper_with_new(new CppTensor(func_random_bernoulli[CppTensor](normShape(shape).wrapped, p, device.wrapped[0])))
+            cdef CppDevice *dev_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            return Tensor.get_wrapper_with_new(new CppTensor(func_random_bernoulli_tensor(normShape(shape).wrapped, p, dev_p)))
 
         @staticmethod
         def uniform(shape, float lower, float upper, Device device = None):
-            if device is None:
-                device = Device.get_default()
-            return Tensor.get_wrapper_with_new(new CppTensor(func_random_uniform[CppTensor](normShape(shape).wrapped, lower, upper, device.wrapped[0])))
+            cdef CppDevice *dev_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            return Tensor.get_wrapper_with_new(new CppTensor(func_random_uniform_tensor(normShape(shape).wrapped, lower, upper, dev_p)))
 
         @staticmethod
         def normal(shape, float mean, float sd, Device device = None):
-            if device is None:
-                device = Device.get_default()
-            return Tensor.get_wrapper_with_new(new CppTensor(func_random_normal[CppTensor](normShape(shape).wrapped, mean, sd, device.wrapped[0])))
+            cdef CppDevice *dev_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            return Tensor.get_wrapper_with_new(new CppTensor(func_random_normal_tensor(normShape(shape).wrapped, mean, sd, dev_p)))
 
         @staticmethod
         def log_normal(shape, float mean, float sd, Device device = None):
-            if device is None:
-                device = Device.get_default()
-            return Tensor.get_wrapper_with_new(new CppTensor(func_random_log_normal[CppTensor](normShape(shape).wrapped, mean, sd, device.wrapped[0])))
+            cdef CppDevice *dev_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            return Tensor.get_wrapper_with_new(new CppTensor(func_random_log_normal_tensor(normShape(shape).wrapped, mean, sd, dev_p)))
 
         @staticmethod
         def gumbel(shape, float mu, float beta, Device device = None):
-            if device is None:
-                device = Device.get_default()
-            return Tensor.get_wrapper_with_new(new CppTensor(func_random_gumbel[CppTensor](normShape(shape).wrapped, mu, beta, device.wrapped[0])))
+            cdef CppDevice *dev_p = NULL
+            if device is not None:
+                dev_p = device.wrapped
+            return Tensor.get_wrapper_with_new(new CppTensor(func_random_gumbel_tensor(normShape(shape).wrapped, mu, beta, dev_p)))
 
     @staticmethod
     def dropout(Tensor x, float rate, bool enabled):
