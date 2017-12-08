@@ -218,7 +218,7 @@ class functions:
         cdef CppGraph *g_p = NULL
         if device is not None:
             dev_p = device.wrapped
-        if device is not None:
+        if g is not None:
             g_p = g.wrapped
         return wrapNode(func_constant_node(normShape(shape).wrapped, k, dev_p, g_p))
 
