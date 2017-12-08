@@ -17,7 +17,7 @@ cdef extern from "primitiv/tensor.h" nogil:
         vector[float] to_vector() except +
         vector[unsigned] argmax(unsigned dim) except +
         vector[unsigned] argmin(unsigned dim) except +
-        void reset(const float k) except +
+        void reset(float k) except +
         # void reset_by_array(const float *values) except +
         void reset_by_vector(const vector[float] &values) except +
         CppTensor reshape(const CppShape &new_shape) except +

@@ -10,8 +10,7 @@ from primitiv._parameter cimport CppParameter
 cdef extern from "primitiv/model.h":
     cdef cppclass CppModel "primitiv::Model":
         CppModel() except +
-        void load(string &path, bool with_stats, CppDevice &device) except +
-        void load(string &path, bool with_stats) except +
+        void load(string &path, bool with_stats, CppDevice *device) except +
         void save(string &path, bool with_stats) except +
         void add(string &name, CppParameter &param) except +
         void add(string &name, CppModel &model) except +
