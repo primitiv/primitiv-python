@@ -49,3 +49,19 @@ cdef class OpenCL(Device):
 
         """
         return CppOpenCL.num_devices(platform_id)
+
+    @staticmethod
+    def check_support(unsigned platform_id, unsigned device_id):
+        """Checks whether the device corresponding to the specified ID is
+        supported.
+
+        :param platform_id: Platform ID to check.
+        :type: int
+        :param device_id: Device ID to check.
+        :type: int
+        :return: True if this class supports the specified device,
+                 False otherwise.
+        :rtype: bool
+
+        """
+        return CppOpenCL.check_support(platform_id, device_id)

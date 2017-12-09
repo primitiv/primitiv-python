@@ -7,6 +7,8 @@ cdef extern from "primitiv/cuda_device.h":
         CppCUDA(unsigned device_id, unsigned rng_seed) except +
         @staticmethod
         unsigned num_devices() except +
+        @staticmethod
+        unsigned check_support(unsigned device_id) except +
 
 
 cdef class CUDA(Device):

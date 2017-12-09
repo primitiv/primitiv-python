@@ -9,6 +9,8 @@ cdef extern from "primitiv/opencl_device.h":
         unsigned num_platforms() except +
         @staticmethod
         unsigned num_devices(unsigned platform_id) except +
+        @staticmethod
+        unsigned check_support(unsigned platform_id, unsigned device_id) except +
 
 
 cdef class OpenCL(Device):
