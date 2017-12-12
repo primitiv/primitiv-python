@@ -5,7 +5,7 @@ from libcpp cimport bool
 from primitiv._device cimport Device
 from primitiv._tensor cimport Tensor
 from primitiv._shape cimport wrapShape, normShape
-from utils cimport ndarrays_to_vector
+from utils cimport ndarrays_to_vector, get_cpp_device
 from primitiv.config cimport pystr_to_cppstr
 
 from weakref import WeakValueDictionary
@@ -81,10 +81,8 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
-        cdef CppDevice *dev_p = NULL
-        if device is not None:
-            dev_p = device.wrapped
-        self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0], dev_p)
+        self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0],
+                          get_cpp_device(device))
         return
 
     def load(self, str path, bool with_stats = True, Device device = None):
@@ -99,10 +97,8 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
-        cdef CppDevice *dev_p = NULL
-        if device is not None:
-            dev_p = device.wrapped
-            self.wrapped.load(pystr_to_cppstr(path), with_stats, dev_p)
+        self.wrapped.load(pystr_to_cppstr(path), with_stats,
+                          get_cpp_device(device))
         return
 
     def save(self, str path, bool with_stats = True):
