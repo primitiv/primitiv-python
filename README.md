@@ -6,45 +6,65 @@
 [![Build Status (develop)](https://img.shields.io/travis/primitiv/primitiv-python/develop.svg?label=build+%28develop%29)](https://travis-ci.org/primitiv/primitiv-python)
 [![PyPI version](https://badge.fury.io/py/primitiv.svg)](https://pypi.python.org/pypi/primitiv)
 
-Python frontend of primitiv
-=================================
+Python Frontend of primitiv
+===========================
 
-Dependency
----------------------------------
+Dependencies
+------------
 
-* C++ primitiv
 * Python 3 (3.5 or later)
 * NumPy (1.11.0 or later)
 * Cython (0.27 or later)
+* scikit-build (0.6.1 or later, only for building)
+* (optional) CUDA (7.5 or later)
+* (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
 
-How to install?
----------------------------------
+Getting Started
+---------------
 
-1. Install [primitiv core library](http://github.com/primitiv/primitiv):
+### Automatic Install using `pip`
 
-```
-$ cmake .. [options]
-$ make
-$ sudo make install
-```
-
-2. Install NumPy and Cython with Python 3
+To install primitiv without CUDA and OpenCL, run the following commands:
 
 ```
-$ sudo apt install python3-numpy
-$ sudo pip3 install cython
+$ pip3 install numpy cython scikit-build [--user]
+$ pip3 install primitiv [--user]
 ```
 
-Currently, Cython 0.27 is not contained in Debian and Ubuntu repositories.
-
-3. Run the following commands in python-primitiv directory:
+To enable CUDA and/or OpenCL support, specify `--enable-cuda` or
+`--enable-opencl` with `--global-option` flag of `pip` like the following
+example:
 
 ```
+$ pip3 install primitiv --global-option --enable-cuda \
+                        --global-option --enable-opncl
+```
+
+### Compiling Step by Step
+
+1. Install NumPy, Cython and scikit-build with Python 3
+
+```
+$ sudo pip3 install numpy cython scikit-build
+```
+
+2. Run the following commands in `primitiv-python` directory:
+
+```
+$ git submodule update --init
 $ python3 ./setup.py build [--enable-cuda] [--enable-opencl]
-$ python3 ./setup.py test  # (optional)
-$ sudo python3 ./setup.py install [--enable-cuda] [--enable-opencl]
+$ python3 ./setup.py test [--enable-cuda] [--enable-opencl] # (optional)
+$ python3 ./setup.py install [--user] [--enable-cuda] [--enable-opencl]
 ```
 
-You also can use `LIBRARY_PATH` and `CPLUS_INCLUDE_PATH` depending on your environment.
+To enable CUDA and/or OpenCL support, run setup script with `--enable-DEVICE` option.
 
-To install CUDA and/or OpenCL support, run setup script with `--enable-DEVICE` option.
+primitiv-python repository contains the core library as a git submodule.
+Note that you have to update the working tree of the core library manually by
+`git submodule update` after you run `git pull` or `git checkout` commands.
+
+Resources
+---------
+
+* [C++ core library of primitiv](https://github.com/primitiv/primitiv)
+* [Examples](https://github.com/primitiv/primitiv-python/tree/develop/examples)
