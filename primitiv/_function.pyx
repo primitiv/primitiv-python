@@ -161,9 +161,9 @@ class functions:
         if isinstance(x, list):
             for node in x:
                 xs.push_back(node.wrapped)
-            return wrapNode(Node_sum_container(xs))
+            return wrapNode(func_sum(xs))
         else:
-            return wrapNode(Node_sum((<Node> x).wrapped, <unsigned> dim))
+            return wrapNode(func_sum((<Node> x).wrapped, <unsigned> dim))
 
     @staticmethod
     def mean(x, dim = None):
@@ -172,9 +172,9 @@ class functions:
         if isinstance(x, list):
             for node in x:
                 xs.push_back(node.wrapped)
-            return wrapNode(Node_mean_container(xs))
+            return wrapNode(func_mean(xs))
         else:
-            return wrapNode(Node_mean((<Node> x).wrapped, <unsigned> dim))
+            return wrapNode(func_mean((<Node> x).wrapped, <unsigned> dim))
 
     @staticmethod
     def broadcast(Node x, unsigned dim, unsigned size):
@@ -415,9 +415,9 @@ class tensor_functions:
         if isinstance(x, list):
             for t in x:
                 xs.push_back(t.wrapped[0])
-            return Tensor.get_wrapper_with_new(new CppTensor(Tensor_sum_container(xs)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_sum(xs)))
         else:
-            return Tensor.get_wrapper_with_new(new CppTensor(Tensor_sum((<Tensor> x).wrapped[0], <unsigned> dim)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_sum((<Tensor> x).wrapped[0], <unsigned> dim)))
 
     @staticmethod
     def mean(x, dim = None):
@@ -426,9 +426,9 @@ class tensor_functions:
         if isinstance(x, list):
             for t in x:
                 xs.push_back(t.wrapped[0])
-            return Tensor.get_wrapper_with_new(new CppTensor(Tensor_mean_container(xs)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_mean(xs)))
         else:
-            return Tensor.get_wrapper_with_new(new CppTensor(Tensor_mean((<Tensor> x).wrapped[0], <unsigned> dim)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_mean((<Tensor> x).wrapped[0], <unsigned> dim)))
 
     @staticmethod
     def broadcast(Tensor x, unsigned dim, unsigned size):

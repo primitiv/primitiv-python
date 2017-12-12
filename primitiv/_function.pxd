@@ -8,17 +8,6 @@ from primitiv._tensor cimport CppTensor
 from primitiv._shape cimport CppShape
 from primitiv._parameter cimport CppParameter
 
-cdef extern from "function_template_wrapper.h" namespace "python_primitiv":
-    CppNode Node_sum(const CppNode &x, unsigned dim) except +
-    CppNode Node_sum_container(const vector[CppNode] &xs) except +
-    CppNode Node_mean(const CppNode &x, unsigned dim) except +
-    CppNode Node_mean_container(const vector[CppNode] &xs) except +
-
-    CppTensor Tensor_sum(const CppTensor &x, unsigned dim) except +
-    CppTensor Tensor_sum_container(const vector[CppTensor] &xs) except +
-    CppTensor Tensor_mean(const CppTensor &x, unsigned dim) except +
-    CppTensor Tensor_mean_container(const vector[CppTensor] &xs) except +
-
 
 cdef extern from "primitiv/functions.h":
     CppTensor func_input_tensor "primitiv::functions::input_tensor" (const CppShape &shape, const vector[float] &data, CppDevice *dev) except +
@@ -51,6 +40,12 @@ cdef extern from "primitiv/functions.h":
     Var func_prelu "primitiv::functions::prelu" [Var](const Var &x, float a) except +
     Var func_elu "primitiv::functions::elu" [Var](const Var &x, float a) except +
     Var func_selu "primitiv::functions::selu" [Var](const Var &x, float a, float s) except +
+    CppNode func_sum "primitiv::functions::sum" (const vector[CppNode] &xs) except +
+    CppTensor func_sum "primitiv::functions::sum" (const vector[CppTensor] &xs) except +
+    Var func_sum "primitiv::functions::sum" [Var](const Var &x, unsigned dim) except +
+    CppNode func_mean "primitiv::functions::mean" (const vector[CppNode] &xs) except +
+    CppTensor func_mean "primitiv::functions::mean" (const vector[CppTensor] &xs) except +
+    Var func_mean "primitiv::functions::mean" [Var](const Var &x, unsigned dim) except +
     Var func_broadcast "primitiv::functions::broadcast" [Var](const Var &x, unsigned dim, unsigned size) except +
     Var func_logsumexp "primitiv::functions::logsumexp" [Var](const Var &x, unsigned dim) except +
     Var func_log_softmax "primitiv::functions::log_softmax" [Var](const Var &x, unsigned dim) except +
