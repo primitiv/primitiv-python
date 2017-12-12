@@ -32,9 +32,6 @@ class ArgumentTest(unittest.TestCase):
         pass
 
     def test_device_instance(self):
-        dev = Device.get_default()
-        self.assertIs(dev, self.device)
-
         tensor = tF.raw_input([], [0])
         dev = tensor.device()
         self.assertIs(dev, self.device)
@@ -46,11 +43,8 @@ class ArgumentTest(unittest.TestCase):
         my_device = Naive()
         self.assertIsNot(my_device, self.device)
 
-        node = F.raw_input([], [0], device=my_device)
+        node = F.raw_input([], [0], dev=my_device)
         dev = node.device()
-        self.assertIs(dev, my_device)
-
-        dev = self.graph.get_device(node)
         self.assertIs(dev, my_device)
 
         param = Parameter([], I.Constant(1))
@@ -58,9 +52,6 @@ class ArgumentTest(unittest.TestCase):
         self.assertIs(dev, self.device)
 
     def test_graph_instance(self):
-        g = Graph.get_default()
-        self.assertIs(g, self.graph)
-
         node = F.raw_input([], [0])
         g = node.graph()
         self.assertIs(g, self.graph)

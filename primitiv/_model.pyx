@@ -4,6 +4,7 @@ from libc.stdint cimport uintptr_t
 from primitiv._device cimport Device
 from primitiv._parameter cimport Parameter
 from primitiv.config cimport pystr_to_cppstr, cppstr_to_pystr
+from utils cimport get_cpp_device
 
 from weakref import WeakValueDictionary
 import weakref
@@ -39,9 +40,8 @@ cdef class Model:
         :type device: bool or None
 
         """
-        if device is None:
-            device = Device.get_default()
-        self.wrapped.load(pystr_to_cppstr(path), with_stats, device.wrapped[0])
+        self.wrapped.load(pystr_to_cppstr(path), with_stats,
+                          get_cpp_device(device))
 
     def save(self, str path, bool with_stats = True):
         """Saves all parameters to a file.

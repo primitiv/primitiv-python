@@ -154,9 +154,8 @@ if build_core:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_OPENCL=ON")
 
 with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
-    print("include README.md package_description.rst", file=fp)
-    print("recursive-include primitiv *.pyx *.pxd *.h", file=fp)
-    print("exclude primitiv/_optimizer_api.h", file=fp)
+    print("include README.md package_description.rst primitiv/py_optimizer.h", file=fp)
+    print("recursive-include primitiv *.pyx *.pxd", file=fp)
     if bundle_core_library:
         print("recursive-include %s *" % SUBMODULE_DIR, file=fp)
 

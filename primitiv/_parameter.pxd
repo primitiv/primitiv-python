@@ -12,11 +12,11 @@ from primitiv._initializer cimport CppInitializer, Initializer
 cdef extern from "primitiv/parameter.h":
     cdef cppclass CppParameter "primitiv::Parameter":
         CppParameter() except +
-        CppParameter(const CppShape &shape, const vector[float] &value, CppDevice &device) except +
-        CppParameter(const CppShape &shape, const CppInitializer &initializer, CppDevice &device) except +
-        void init(const CppShape &shape, const vector[float] &value, CppDevice &device) except +
-        void init(const CppShape &shape, const CppInitializer &initializer, CppDevice &device) except +
-        void load(const string &path, bool with_stats, CppDevice &device) except +
+        CppParameter(const CppShape &shape, const vector[float] &value, CppDevice *device) except +
+        CppParameter(const CppShape &shape, const CppInitializer &initializer, CppDevice *device) except +
+        void init(const CppShape &shape, const vector[float] &value, CppDevice *device) except +
+        void init(const CppShape &shape, const CppInitializer &initializer, CppDevice *device) except +
+        void load(const string &path, bool with_stats, CppDevice *device) except +
         void save(const string &path, bool with_stats) except +
         bool valid() except +
         void reset_gradient() except +
