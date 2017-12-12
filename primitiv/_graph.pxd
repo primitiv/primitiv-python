@@ -23,28 +23,9 @@ cdef extern from "primitiv/graph.h" nogil:
         void backward() except +
 
 
-cdef extern from "node_func.h" namespace "python_primitiv_node":
-    cdef CppNode func_node_pos(const CppNode &x) except +
-    cdef CppNode func_node_neg(const CppNode &x) except +
-    cdef CppNode func_node_add(const CppNode &x, float k) except +
-    cdef CppNode func_node_add(float k, const CppNode &x) except +
-    cdef CppNode func_node_add(const CppNode &a, const CppNode &b) except +
-    cdef CppNode func_node_sub(const CppNode &x, float k) except +
-    cdef CppNode func_node_sub(float k, const CppNode &x) except +
-    cdef CppNode func_node_sub(const CppNode &a, const CppNode &b) except +
-    cdef CppNode func_node_mul(const CppNode &x, float k) except +
-    cdef CppNode func_node_mul(float k, const CppNode &x) except +
-    cdef CppNode func_node_mul(const CppNode &a, const CppNode &b) except +
-    cdef CppNode func_node_div(const CppNode &x, float k) except +
-    cdef CppNode func_node_div(float k, const CppNode &x) except +
-    cdef CppNode func_node_div(const CppNode &a, const CppNode &b) except +
-
-
 cdef extern from "primitiv/graph.h" nogil:
     cdef cppclass CppGraph "primitiv::Graph":
         CppGraph() except +
-        @staticmethod
-        CppGraph &get_default() except +
         @staticmethod
         void set_default(CppGraph &g) except +
         void clear() except +
