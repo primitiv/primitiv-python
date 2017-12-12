@@ -1,25 +1,27 @@
-#ifndef PYTHON_PRIMITIV_PY_OPTIMIZER_H_
-#define PYTHON_PRIMITIV_PY_OPTIMIZER_H_
+#ifndef PRIMITIV_PYTHON_PY_OPTIMIZER_H_
+#define PRIMITIV_PYTHON_PY_OPTIMIZER_H_
 
 #include <primitiv/optimizer.h>
 #include <iostream>
 
-__PYX_EXTERN_C int python_primitiv_optimizer_get_configs(
+__PYX_EXTERN_C int primitiv_python_optimizer_get_configs(
                         PyObject *obj,
                         std::unordered_map<std::string, unsigned> &uint_configs,
                         std::unordered_map<std::string, float> &float_configs);
-__PYX_EXTERN_C int python_primitiv_optimizer_set_configs(PyObject *obj,
+__PYX_EXTERN_C int primitiv_python_optimizer_set_configs(PyObject *obj,
                         const std::unordered_map<std::string, unsigned> &uint_configs,
                         const std::unordered_map<std::string, float> &float_configs);
-__PYX_EXTERN_C int python_primitiv_optimizer_configure_parameter(
+__PYX_EXTERN_C int primitiv_python_optimizer_configure_parameter(
                         PyObject *obj,
                         primitiv::Parameter &param);
-__PYX_EXTERN_C int python_primitiv_optimizer_update_parameter(
+__PYX_EXTERN_C int primitiv_python_optimizer_update_parameter(
                         PyObject *obj,
                         float scale,
                         primitiv::Parameter &param);
 
-namespace python_primitiv {
+namespace primitiv {
+
+namespace python {
 
 class PyOptimizer : public primitiv::Optimizer {
 
@@ -28,7 +30,7 @@ public:
 
   void get_configs(std::unordered_map<std::string, unsigned> &uint_configs,
                    std::unordered_map<std::string, float> &float_configs) const override {
-    int ret = python_primitiv_optimizer_get_configs(obj_, uint_configs, float_configs);
+    int ret = primitiv_python_optimizer_get_configs(obj_, uint_configs, float_configs);
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
@@ -40,7 +42,7 @@ public:
   void set_configs(const std::unordered_map<std::string, unsigned> &uint_configs,
                    const std::unordered_map<std::string, float> &float_configs) override {
     Optimizer::set_configs(uint_configs, float_configs);
-    int ret = python_primitiv_optimizer_set_configs(obj_, uint_configs, float_configs);
+    int ret = primitiv_python_optimizer_set_configs(obj_, uint_configs, float_configs);
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
@@ -49,7 +51,7 @@ public:
   }
 
   void configure_parameter(primitiv::Parameter &param) override {
-    int ret = python_primitiv_optimizer_configure_parameter(obj_, param);
+    int ret = primitiv_python_optimizer_configure_parameter(obj_, param);
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
@@ -58,7 +60,7 @@ public:
   }
 
   void update_parameter(float scale, primitiv::Parameter &param) override {
-    int ret = python_primitiv_optimizer_update_parameter(obj_, scale, param);
+    int ret = primitiv_python_optimizer_update_parameter(obj_, scale, param);
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
@@ -70,6 +72,8 @@ private:
   PyObject *obj_;
 };
 
-}  // namespace python_primitiv
+}  // namespace python
 
-#endif  // PYTHON_PRIMITIV_PY_OPTIMIZER_H_
+}  // namespace primitiv
+
+#endif  // PRIMITIV_PYTHON_PY_OPTIMIZER_H_

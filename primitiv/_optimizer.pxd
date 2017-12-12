@@ -37,5 +37,5 @@ cdef class Optimizer:
 
 
 cdef extern from "py_optimizer.h":
-    cdef cppclass CppPyOptimizer "python_primitiv::PyOptimizer" (CppOptimizer):
+    cdef cppclass CppPyOptimizer "primitiv::python::PyOptimizer" (CppOptimizer):
         CppPyOptimizer(object obj) except +
