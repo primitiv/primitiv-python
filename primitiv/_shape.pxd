@@ -32,6 +32,8 @@ cdef extern from "primitiv/shape.h":
 
 cdef class Shape:
     cdef CppShape wrapped
+    @staticmethod
+    cdef Shape get_wrapper(CppShape wrapped)
 
 
 cdef inline Shape wrapShape(CppShape wrapped) except +:
