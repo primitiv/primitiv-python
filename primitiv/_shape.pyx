@@ -186,8 +186,7 @@ cdef class Shape:
         :rtype: primitiv.Shape
 
         """
-        self.wrapped.resize_dim(dim, m)
-        return self
+        return Shape.get_wrapper(self.wrapped.resize_dim(dim, m))
 
     def resize_batch(self, unsigned batch):
         """Creates a new shape which have specified batch size.
@@ -198,8 +197,7 @@ cdef class Shape:
         :rtype: primitiv.Shape
 
         """
-        self.wrapped.resize_batch(batch)
-        return self
+        return Shape.get_wrapper(self.wrapped.resize_batch(batch))
 
     def update_dim(self, unsigned dim, unsigned m):
         """Directly updates a specified dimension.
@@ -226,3 +224,9 @@ cdef class Shape:
 
     def __deepcopy__(self, memo):
         raise NotImplementedError(type(self).__name__ + " does not support `__deepcopy__` for now.")
+
+    @staticmethod
+    cdef Shape get_wrapper(CppShape wrapped):
+        cdef Shape shape = Shape.__new__(Shape)
+        shape.wrapped = wrapped
+        return shape
