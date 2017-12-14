@@ -43,7 +43,7 @@ class ArgumentTest(unittest.TestCase):
         my_device = Naive()
         self.assertIsNot(my_device, self.device)
 
-        node = F.raw_input([], [0], dev=my_device)
+        node = F.raw_input([], [0], device=my_device)
         dev = node.device()
         self.assertIs(dev, my_device)
 

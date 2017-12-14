@@ -275,14 +275,14 @@ cdef class Graph:
             self.wrapped = NULL
 
     @staticmethod
-    def set_default(Graph g):
+    def set_default(Graph graph):
         """Specifies a new default graph.
 
-        :param g: Reference of the new default graph.
-        :type g: primitiv.Graph
+        :param graph: Reference of the new default graph.
+        :type graph: primitiv.Graph
 
         """
-        CppGraph.set_default(g.wrapped[0])
+        CppGraph.set_default(graph.wrapped[0])
 
     def clear(self):
         """Clear all functions in the graph.

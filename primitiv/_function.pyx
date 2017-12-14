@@ -16,15 +16,15 @@ import numpy as np
 class functions:
 
     @staticmethod
-    def raw_input(shape, vector[float] data, Device dev = None, Graph g = None):
+    def raw_input(shape, vector[float] data, Device device = None, Graph graph = None):
         return wrapNode(func_input_node(normShape(shape).wrapped, data,
-                                        get_cpp_device(dev), get_cpp_graph(g)))
+                                        get_cpp_device(device), get_cpp_graph(graph)))
 
     # NOTE(vbkaisetsu)
     # This function takes an np.ndarray or a list of np.ndarray
     # instead of a vector.
     @staticmethod
-    def input(data, Device dev = None, Graph g = None):
+    def input(data, Device device = None, Graph graph = None):
         # NOTE(vbkaisetsu, odashi):
         # In this function, we don't check whether each ndarray is empty
         # (i.e., it doesn't have any elements) or not.
@@ -42,16 +42,16 @@ class functions:
             shape = Shape(data[0].shape, len(data))
         else:
             raise TypeError("`data` has incorrect type.")
-        return functions.raw_input(shape, ndarrays_to_vector(data), dev, g)
+        return functions.raw_input(shape, ndarrays_to_vector(data), device, graph)
 
 
     @staticmethod
-    def parameter(Parameter param, Graph g = None):
-        return wrapNode(func_parameter_node(param.wrapped[0], get_cpp_graph(g)))
+    def parameter(Parameter param, Graph graph = None):
+        return wrapNode(func_parameter_node(param.wrapped[0], get_cpp_graph(graph)))
 
     @staticmethod
-    def copy(Node x, Device dev = None):
-        return wrapNode(func_copy(x.wrapped, get_cpp_device(dev)))
+    def copy(Node x, Device device = None):
+        return wrapNode(func_copy(x.wrapped, get_cpp_device(device)))
 
     @staticmethod
     def pick(Node x, vector[unsigned] ids, unsigned dim):
@@ -206,23 +206,23 @@ class functions:
         return wrapNode(func_stop_gradient(x.wrapped))
 
     @staticmethod
-    def constant(shape, float k, Device dev = None, Graph g = None):
+    def constant(shape, float k, Device device = None, Graph graph = None):
         return wrapNode(func_constant_node(normShape(shape).wrapped, k,
-                                           get_cpp_device(dev), get_cpp_graph(g)))
+                                           get_cpp_device(device), get_cpp_graph(graph)))
 
     @staticmethod
-    def zeros(shape, Device dev = None, Graph g = None):
+    def zeros(shape, Device device = None, Graph graph = None):
         return wrapNode(func_zeros_node(normShape(shape).wrapped,
-                                        get_cpp_device(dev), get_cpp_graph(g)))
+                                        get_cpp_device(device), get_cpp_graph(graph)))
 
     @staticmethod
-    def ones(shape, Device dev = None, Graph g = None):
+    def ones(shape, Device device = None, Graph graph = None):
         return wrapNode(func_ones_node(normShape(shape).wrapped,
-                                       get_cpp_device(dev), get_cpp_graph(g)))
+                                       get_cpp_device(device), get_cpp_graph(graph)))
 
     @staticmethod
-    def identity(unsigned size, Device dev = None, Graph g = None):
-        return wrapNode(func_identity_node(size, get_cpp_device(dev), get_cpp_graph(g)))
+    def identity(unsigned size, Device device = None, Graph graph = None):
+        return wrapNode(func_identity_node(size, get_cpp_device(device), get_cpp_graph(graph)))
 
     class batch:
         @staticmethod
@@ -239,29 +239,29 @@ class functions:
 
     class random:
         @staticmethod
-        def bernoulli(shape, float p, Device dev = None, Graph g = None):
+        def bernoulli(shape, float p, Device device = None, Graph graph = None):
             return wrapNode(func_random_bernoulli_node(normShape(shape).wrapped, p,
-                                                       get_cpp_device(dev), get_cpp_graph(g)))
+                                                       get_cpp_device(device), get_cpp_graph(graph)))
 
         @staticmethod
-        def uniform(shape, float lower, float upper, Device dev = None, Graph g = None):
+        def uniform(shape, float lower, float upper, Device device = None, Graph graph = None):
             return wrapNode(func_random_uniform_node(normShape(shape).wrapped, lower, upper,
-                                                     get_cpp_device(dev), get_cpp_graph(g)))
+                                                     get_cpp_device(device), get_cpp_graph(graph)))
 
         @staticmethod
-        def normal(shape, float mean, float sd, Device dev = None, Graph g = None):
+        def normal(shape, float mean, float sd, Device device = None, Graph graph = None):
             return wrapNode(func_random_normal_node(normShape(shape).wrapped, mean, sd,
-                                                    get_cpp_device(dev), get_cpp_graph(g)))
+                                                    get_cpp_device(device), get_cpp_graph(graph)))
 
         @staticmethod
-        def log_normal(shape, float mean, float sd, Device dev = None, Graph g = None):
+        def log_normal(shape, float mean, float sd, Device device = None, Graph graph = None):
             return wrapNode(func_random_log_normal_node(normShape(shape).wrapped, mean, sd,
-                                                        get_cpp_device(dev), get_cpp_graph(g)))
+                                                        get_cpp_device(device), get_cpp_graph(graph)))
 
         @staticmethod
-        def gumbel(shape, float mu, float beta, Device dev = None, Graph g = None):
+        def gumbel(shape, float mu, float beta, Device device = None, Graph graph = None):
             return wrapNode(func_random_gumbel_node(normShape(shape).wrapped, mu, beta,
-                                                    get_cpp_device(dev), get_cpp_graph(g)))
+                                                    get_cpp_device(device), get_cpp_graph(graph)))
 
     @staticmethod
     def dropout(Node x, float rate, bool enabled):
@@ -271,15 +271,15 @@ class functions:
 class tensor_functions:
 
     @staticmethod
-    def raw_input(shape, vector[float] data, Device dev = None):
+    def raw_input(shape, vector[float] data, Device device = None):
         return Tensor.get_wrapper_with_new(new CppTensor(func_input_tensor(normShape(shape).wrapped, data,
-                                                                           get_cpp_device(dev))))
+                                                                           get_cpp_device(device))))
 
     # NOTE(vbkaisetsu)
     # This function takes an np.ndarray or a list of np.ndarray
     # instead of a vector.
     @staticmethod
-    def input(data, Device dev = None):
+    def input(data, Device device = None):
         # NOTE(vbkaisetsu, odashi):
         # In this function, we don't check whether each ndarray is empty
         # (i.e., it doesn't have any elements) or not.
@@ -297,15 +297,15 @@ class tensor_functions:
             shape = Shape(data[0].shape, len(data))
         else:
             raise TypeError("`data` has incorrect type.")
-        return tensor_functions.raw_input(shape, ndarrays_to_vector(data), dev)
+        return tensor_functions.raw_input(shape, ndarrays_to_vector(data), device)
 
     @staticmethod
     def parameter(Parameter param):
         return Tensor.get_wrapper_with_new(new CppTensor(func_parameter_tensor(param.wrapped[0])))
 
     @staticmethod
-    def copy(Tensor x, Device dev = None):
-        return Tensor.get_wrapper_with_new(new CppTensor(func_copy(x.wrapped[0], get_cpp_device(dev))))
+    def copy(Tensor x, Device device = None):
+        return Tensor.get_wrapper_with_new(new CppTensor(func_copy(x.wrapped[0], get_cpp_device(device))))
 
     @staticmethod
     def pick(Tensor x, vector[unsigned] ids, unsigned dim):
@@ -460,23 +460,23 @@ class tensor_functions:
         return Tensor.get_wrapper_with_new(new CppTensor(func_stop_gradient(x.wrapped[0])))
 
     @staticmethod
-    def constant(shape, float k, Device dev = None):
+    def constant(shape, float k, Device device = None):
         return Tensor.get_wrapper_with_new(new CppTensor(func_constant_tensor(normShape(shape).wrapped, k,
-                                                                              get_cpp_device(dev))))
+                                                                              get_cpp_device(device))))
 
     @staticmethod
-    def zeros(shape, Device dev = None):
+    def zeros(shape, Device device = None):
         return Tensor.get_wrapper_with_new(new CppTensor(func_zeros_tensor(normShape(shape).wrapped,
-                                                                           get_cpp_device(dev))))
+                                                                           get_cpp_device(device))))
 
     @staticmethod
-    def ones(shape, Device dev = None):
+    def ones(shape, Device device = None):
         return Tensor.get_wrapper_with_new(new CppTensor(func_ones_tensor(normShape(shape).wrapped,
-                                                                          get_cpp_device(dev))))
+                                                                          get_cpp_device(device))))
 
     @staticmethod
-    def identity(unsigned size, Device dev = None):
-        return Tensor.get_wrapper_with_new(new CppTensor(func_identity_tensor(size, get_cpp_device(dev))))
+    def identity(unsigned size, Device device = None):
+        return Tensor.get_wrapper_with_new(new CppTensor(func_identity_tensor(size, get_cpp_device(device))))
 
     class batch:
         @staticmethod
@@ -493,29 +493,29 @@ class tensor_functions:
 
     class random:
         @staticmethod
-        def bernoulli(shape, float p, Device dev = None):
+        def bernoulli(shape, float p, Device device = None):
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_bernoulli_tensor(normShape(shape).wrapped, p,
-                                                                                          get_cpp_device(dev))))
+                                                                                          get_cpp_device(device))))
 
         @staticmethod
-        def uniform(shape, float lower, float upper, Device dev = None):
+        def uniform(shape, float lower, float upper, Device device = None):
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_uniform_tensor(normShape(shape).wrapped, lower, upper,
-                                                                                        get_cpp_device(dev))))
+                                                                                        get_cpp_device(device))))
 
         @staticmethod
-        def normal(shape, float mean, float sd, Device dev = None):
+        def normal(shape, float mean, float sd, Device device = None):
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_normal_tensor(normShape(shape).wrapped, mean, sd,
-                                                                                       get_cpp_device(dev))))
+                                                                                       get_cpp_device(device))))
 
         @staticmethod
-        def log_normal(shape, float mean, float sd, Device dev = None):
+        def log_normal(shape, float mean, float sd, Device device = None):
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_log_normal_tensor(normShape(shape).wrapped, mean, sd,
-                                                                                           get_cpp_device(dev))))
+                                                                                           get_cpp_device(device))))
 
         @staticmethod
-        def gumbel(shape, float mu, float beta, Device dev = None):
+        def gumbel(shape, float mu, float beta, Device device = None):
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_gumbel_tensor(normShape(shape).wrapped, mu, beta,
-                                                                                       get_cpp_device(dev))))
+                                                                                       get_cpp_device(device))))
 
     @staticmethod
     def dropout(Tensor x, float rate, bool enabled):

@@ -17,14 +17,14 @@ cdef class Device:
     """
 
     @staticmethod
-    def set_default(Device dev):
+    def set_default(Device device):
         """Specifies a new default device.
 
-        :param dev: Reference of the new default device.
-        :type dev: primitiv.Device
+        :param device: Reference of the new default device.
+        :type device: primitiv.Device
 
         """
-        CppDevice.set_default(dev.wrapped[0])
+        CppDevice.set_default(device.wrapped[0])
 
     def dump_description(self):
         """Prints device description to stderr.
