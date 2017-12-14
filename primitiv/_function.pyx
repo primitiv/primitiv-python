@@ -70,8 +70,8 @@ class functions:
         return wrapNode(func_concat(vec, dim))
 
     @staticmethod
-    def reshape(Node x, Shape new_shape):
-        return wrapNode(func_reshape(x.wrapped, new_shape.wrapped))
+    def reshape(Node x, new_shape):
+        return wrapNode(func_reshape(x.wrapped, normShape(new_shape).wrapped))
 
     @staticmethod
     def flatten(Node x):
@@ -324,8 +324,8 @@ class tensor_functions:
         return Tensor.get_wrapper_with_new(new CppTensor(func_concat(vec, dim)))
 
     @staticmethod
-    def reshape(Tensor x, Shape new_shape):
-        return Tensor.get_wrapper_with_new(new CppTensor(func_reshape(x.wrapped[0], new_shape.wrapped)))
+    def reshape(Tensor x, new_shape):
+        return Tensor.get_wrapper_with_new(new CppTensor(func_reshape(x.wrapped[0], normShape(new_shape).wrapped)))
 
     @staticmethod
     def flatten(Tensor x):
