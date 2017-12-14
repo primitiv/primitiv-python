@@ -9,6 +9,8 @@
 Python Frontend of primitiv
 ===========================
 
+This frontend is compatible with **primitiv 0.3.x**.
+
 Dependencies
 ------------
 
