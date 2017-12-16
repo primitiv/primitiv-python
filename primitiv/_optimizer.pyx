@@ -235,7 +235,7 @@ cdef class Optimizer:
         raise NotImplementedError(type(self).__name__ + " does not support `__deepcopy__` for now.")
 
 
-cdef public api int python_primitiv_optimizer_configure_parameter(
+cdef public api int primitiv_python_optimizer_configure_parameter(
                         object self,
                         CppParameter &param) except -1:
     # NOTE(vbkaisetsu):
@@ -248,7 +248,7 @@ cdef public api int python_primitiv_optimizer_configure_parameter(
                                         % self.__class__.__name__)
 
 
-cdef public api int python_primitiv_optimizer_update_parameter(
+cdef public api int primitiv_python_optimizer_update_parameter(
                         object self,
                         float scale,
                         CppParameter &param) except -1:
@@ -262,7 +262,7 @@ cdef public api int python_primitiv_optimizer_update_parameter(
                                         % self.__class__.__name__)
 
 
-cdef public api int python_primitiv_optimizer_get_configs(
+cdef public api int primitiv_python_optimizer_get_configs(
                         object self,
                         unordered_map[string, unsigned] &uint_configs,
                         unordered_map[string, float] &float_configs) except -1:
@@ -278,7 +278,7 @@ cdef public api int python_primitiv_optimizer_get_configs(
                                         % self.__class__.__name__)
 
 
-cdef public api int python_primitiv_optimizer_set_configs(
+cdef public api int primitiv_python_optimizer_set_configs(
                         object self,
                         const unordered_map[string, unsigned] &uint_configs,
                         const unordered_map[string, float] &float_configs) except -1:

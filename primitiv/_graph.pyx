@@ -4,7 +4,10 @@ from libcpp.vector cimport vector
 from primitiv._device cimport Device
 from primitiv._shape cimport wrapShape
 from primitiv._tensor cimport Tensor
-from primitiv._function cimport func_pow, func_ipow, func_matmul
+from primitiv._function cimport (
+    func_positive, func_negative, func_add, func_subtract, func_multiply,
+    func_divide, func_pow, func_ipow, func_matmul,
+)
 from primitiv.config cimport pystr_to_cppstr, cppstr_to_pystr
 
 from weakref import WeakValueDictionary
@@ -136,7 +139,7 @@ cdef class Node:
             vec = self.wrapped.to_vector()
         output = []
         for j in range(s.batch()):
-            output_item = np.empty([s[i] for i in range(s.depth())], dtype=np.float32, order="F")
+            output_item = np.empty(s.dims(), dtype=np.float32, order="F")
             np_data = <np.float32_t*> output_item.data
             with nogil:
                 for i in range(volume):
@@ -180,38 +183,38 @@ cdef class Node:
             self.wrapped.backward()
 
     def __pos__(self):
-        return wrapNode(func_node_pos(self.wrapped))
+        return wrapNode(func_positive(self.wrapped))
 
     def __neg__(self):
-        return wrapNode(func_node_neg(self.wrapped))
+        return wrapNode(func_negative(self.wrapped))
 
     def __add__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(func_node_add((<Node> left).wrapped, <float> right))
+            return wrapNode(func_add((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(func_node_add(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_add(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(func_node_add((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_add((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __sub__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(func_node_sub((<Node> left).wrapped, <float> right))
+            return wrapNode(func_subtract((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(func_node_sub(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_subtract(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(func_node_sub((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_subtract((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
     def __mul__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(func_node_mul((<Node> left).wrapped, <float> right))
+            return wrapNode(func_multiply((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(func_node_mul(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_multiply(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(func_node_mul((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_multiply((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
@@ -223,11 +226,11 @@ cdef class Node:
 
     def __truediv__(left, right):
         if isinstance(right, (int, float)):
-            return wrapNode(func_node_div((<Node> left).wrapped, <float> right))
+            return wrapNode(func_divide((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):
-            return wrapNode(func_node_div(<float> left, (<Node> right).wrapped))
+            return wrapNode(func_divide(<float> left, (<Node> right).wrapped))
         elif isinstance(left, Node) and isinstance(right, Node):
-            return wrapNode(func_node_div((<Node> left).wrapped, (<Node> right).wrapped))
+            return wrapNode(func_divide((<Node> left).wrapped, (<Node> right).wrapped))
         else:
             return NotImplemented
 
@@ -272,25 +275,14 @@ cdef class Graph:
             self.wrapped = NULL
 
     @staticmethod
-    def get_default():
-        """Retrieves the current default graph.
-
-        :return: Reference of the current default graph.
-        :rtype: primitiv.Graph
-        :raises RuntimeError: if the default graph is null.
-
-        """
-        return Graph.get_wrapper(&CppGraph.get_default())
-
-    @staticmethod
-    def set_default(Graph g):
+    def set_default(Graph graph):
         """Specifies a new default graph.
 
-        :param g: Reference of the new default graph.
-        :type g: primitiv.Graph
+        :param graph: Reference of the new default graph.
+        :type graph: primitiv.Graph
 
         """
-        CppGraph.set_default(g.wrapped[0])
+        CppGraph.set_default(graph.wrapped[0])
 
     def clear(self):
         """Clear all functions in the graph.
