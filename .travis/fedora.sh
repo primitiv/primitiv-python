@@ -10,10 +10,13 @@ docker exec travis-ci bash -c "dnf update -y"
 docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake python3-devel python3-numpy"
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
-# OpenCL test is disabled in the following reasons:
+# TODO:
+# OpenCL test is disabled because irreproducible memory error is occured
+# in Python+OpenCL+Fedora(+Travis?) combination.
 #
-# 1. Irreproducible memory error is occured in Python+OpenCL+Fedora(+Travis?) combination.
-# 2. The test is run on the virtual machine. This situation is very rare.
+# For developers:
+# If you have Fedora machine and the bug is reproducible, please fix the bug
+# in your environment.
 
 # # install OpenCL environment
 # docker exec travis-ci bash -c "dnf install -y opencl-headers hwloc-devel libtool-ltdl-devel ocl-icd-devel ocl-icd clang llvm-devel clang-devel zlib-devel blas-devel boost-devel patch --setopt=install_weak_deps=False"
