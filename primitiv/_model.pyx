@@ -74,42 +74,20 @@ cdef class Model:
             raise TypeError("Argument 'arg' has incorrect type (Parameter or Model)")
         self.added.append(arg)
 
-    def scan_attributes(self):
-        """Registers all parameter and model members in this model.
+    def __setattr__(self, key, value):
+        """Add a specified object if it is Parameter or Model."""
+        if isinstance(value, Parameter) and value not in self.added:
+            self.add(key, value)
+        if isinstance(value, Model) and value not in self.added:
+            self.add(key, value)
+        self.__dict__[key] = value
 
-        This method searches all Parameter and Model objects defined as the
-        attributes in the model object, and calls add() for each parameter/model
-        using corresponding attribute key to the name argument.
-
-        Example:
-
-            >>> class ParentModel(Model):
-            ...     def __init__(self):
-            ...         self.param1 = Parameter()
-            ...         self.param2 = Parameter()
-            ...         self.submodel1 = SubModel1() # Sub class of Model
-            ...         self.submodel2 = SubModel2() # Sub class of Model
-            ...         self.scan_attributes()
-
-        is equivalent to:
-
-            >>> class ParentModel(Model):
-            ...     def __init__(self):
-            ...         self.param1 = Parameter()
-            ...         self.param2 = Parameter()
-            ...         self.submodel1 = SubModel1()
-            ...         self.submodel2 = SubModel2()
-            ...         self.add("param1", self.param1)
-            ...         self.add("param2", self.param2)
-            ...         self.add("submodel1", self.submodel1)
-            ...         self.add("submodel2", self.submodel2)
-
-        """
-        for k, v in self.__dict__.items():
-            if isinstance(v, Parameter) and v not in self.added:
-                self.add(k, v)
-            if isinstance(v, Model) and v not in self.added:
-                self.add(k, v)
+    def __delattr__(self, key):
+        # NOTE: __delattr__ is not called when the parent object is deleted.
+        item = self.__dict__[key]
+        if isinstance(item, Parameter) or isinstance(item, Model):
+            raise TypeError("")
+        del self.__dict__[key]
 
     def __getitem__(self, key):
         """Retrieves a parameter or a model in this model.
