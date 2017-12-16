@@ -75,7 +75,13 @@ cdef class Model:
         self.added.append(arg)
 
     def __setattr__(self, key, value):
-        """Add a specified object if it is Parameter or Model."""
+        """Set attribute
+
+        If Parameter or Model is set, add(key, value) is additionally
+        called to register a new parameter. Otherwise, a value is
+        normally set to this model.
+
+        """
         if isinstance(value, Parameter) and value not in self.added:
             self.add(key, value)
         if isinstance(value, Model) and value not in self.added:
@@ -83,10 +89,10 @@ cdef class Model:
         self.__dict__[key] = value
 
     def __delattr__(self, key):
-        # NOTE: __delattr__ is not called when the parent object is deleted.
+        # NOTE(vbkaisetsu): __delattr__ is not called when the parent object is deleted.
         item = self.__dict__[key]
         if isinstance(item, Parameter) or isinstance(item, Model):
-            raise TypeError("")
+            raise TypeError("Parameter and Model are not deletable.")
         del self.__dict__[key]
 
     def __getitem__(self, key):
