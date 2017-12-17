@@ -65,6 +65,9 @@ cdef class Model:
         ``name`` should not be overlapped with all registered parameters and
         submodels.
 
+        This function does not modify attribute information of this model.
+        To set ``arg`` as an attribule, use ``__setattr__`` instead.
+
         """
         if isinstance(arg, Parameter):
             self.wrapped.add(pystr_to_cppstr(name), (<Parameter> arg).wrapped[0])
