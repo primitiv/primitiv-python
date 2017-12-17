@@ -10,7 +10,7 @@ docker exec travis-ci bash -c "dnf update -y"
 docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake python3-devel python3-numpy"
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
-# TODO:
+# NOTE(vbkaisetsu):
 # OpenCL test is disabled because irreproducible memory error is occured
 # in Python+OpenCL+Fedora(+Travis?) combination.
 #
