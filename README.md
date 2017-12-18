@@ -26,6 +26,13 @@ Getting Started
 
 ### Automatic Install using `pip`
 
+According to the `manylinux1` policy described in
+[PEP 513](https://www.python.org/dev/peps/pep-0513/), binary packages
+**should depend only on an extremely limited set of external shared libraries.**
+Most users may install primitiv with CUDA or OpenCL that is not supported in
+`manylinux1` policy, so we provide only a source pacakge for now. `pip` command
+downloads a source package and builds it before installing.
+
 To install primitiv without CUDA and OpenCL, run the following commands:
 
 ```
