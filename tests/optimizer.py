@@ -13,7 +13,6 @@ class TestModel(Model):
     def __init__(self):
         self.param = Parameter([5], I.Constant(0))
         self.param.gradient = tF.raw_input([5], [1, 2, 3, 4, 5])
-        self.scan_attributes()
 
 
 class Optimizer(unittest.TestCase):
