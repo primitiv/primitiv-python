@@ -26,17 +26,26 @@ Install dependencies::
 
     pip3 install numpy cython scikit-build
 
-Install primitiv without CUDA and OpenCL::
+Build and install primitiv without CUDA and OpenCL::
 
     pip3 install primitiv
 
-Install primitiv with CUDA and/or OpenCL support::
+Build and install primitiv with CUDA and/or OpenCL support::
 
     # Enable only CUDA
     pip3 install primitiv --global-option --enable-cuda
 
     # Enable both CUDA and OpenCL
     pip3 install primitiv --global-option --enable-cuda --global-option --enable-opencl
+
+Notes
+-----
+
+According to the ``manylinux1`` policy described in
+`PEP 513 <https://www.python.org/dev/peps/pep-0513/>`_, binary packages
+are required to depend only on an extremely limited set of external shared libraries.
+Most users may install *primitiv* with CUDA and/or OpenCL backends that are not supported in
+the ``manylinux1`` policy. For now, we provide only a source pacakge.
 
 Resources
 ---------
