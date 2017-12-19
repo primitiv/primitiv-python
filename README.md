@@ -45,7 +45,7 @@ $ pip3 install primitiv --global-option --enable-cuda \
 For now, we provide only a source pacakge, and `pip` command
 downloads a source package and builds it before installing.
 This is useful for users to install this library with CUDA/OpenCL backends
-with keeping compatibility with the `manylinux1` standard described in
+while keeping compatibility with the `manylinux1` standard described in
 [PEP 513](https://www.python.org/dev/peps/pep-0513/).
 
 
