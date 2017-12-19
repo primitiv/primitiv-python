@@ -9,7 +9,7 @@
 Python Frontend of primitiv
 ===========================
 
-This frontend is compatible with **primitiv 0.3.x**.
+This frontend is compatible with **primitiv core library 0.3.x**.
 
 Dependencies
 ------------
@@ -26,13 +26,6 @@ Getting Started
 
 ### Automatic Install using `pip`
 
-According to the `manylinux1` policy described in
-[PEP 513](https://www.python.org/dev/peps/pep-0513/), binary packages
-are required to depend only on an extremely limited set of external shared libraries.
-Most users may install *primitiv* with CUDA and/or OpenCL backends that are not supported in
-the `manylinux1` policy. For now, we provide only a source pacakge. `pip` command
-downloads a source package and builds it before installing.
-
 To install primitiv without CUDA and OpenCL, run the following commands:
 
 ```
@@ -46,8 +39,15 @@ example:
 
 ```
 $ pip3 install primitiv --global-option --enable-cuda \
-                        --global-option --enable-opncl
+                        --global-option --enable-opencl
 ```
+
+For now, we provide only a source pacakge, and `pip` command
+downloads a source package and builds it before installing.
+This is useful for users to install this library with CUDA/OpenCL backends
+with keeping compatibility with the `manylinux1` standard described in
+[PEP 513](https://www.python.org/dev/peps/pep-0513/).
+
 
 ### Compiling Step by Step
 
@@ -57,7 +57,7 @@ $ pip3 install primitiv --global-option --enable-cuda \
 $ sudo pip3 install numpy cython scikit-build
 ```
 
-2. Run the following commands in `primitiv-python` directory:
+2. Run following commands in `primitiv-python` directory:
 
 ```
 $ git submodule update --init
@@ -66,14 +66,15 @@ $ python3 ./setup.py test [--enable-cuda] [--enable-opencl] # (optional)
 $ python3 ./setup.py install [--user] [--enable-cuda] [--enable-opencl]
 ```
 
-To enable CUDA and/or OpenCL support, run setup script with `--enable-DEVICE` option.
+To enable CUDA/OpenCL support, run `setup.py` with `--enable-DEVICE` option.
 
-primitiv-python repository contains the core library as a git submodule.
+*primitiv-python* repository contains the core library as a git submodule.
 Note that you have to update the working tree of the core library manually by
 `git submodule update` after you run `git pull` or `git checkout` commands.
+
 
 Resources
 ---------
 
 * [C++ core library of primitiv](https://github.com/primitiv/primitiv)
-* [Examples](https://github.com/primitiv/primitiv-python/tree/develop/examples)
+* [Examples/tutorials](https://github.com/primitiv/primitiv-python/tree/develop/examples)
