@@ -1,6 +1,7 @@
 primitiv: A Neural Network Toolkit. (Python frontend)
 =====================================================
 
+
 Features
 --------
 
@@ -9,6 +10,7 @@ Features
 - Automatic minibatch broadcasting
 - Mostly device-independent
 - Simple usage
+
 
 Install
 -------
@@ -38,14 +40,16 @@ Build and install primitiv with CUDA and/or OpenCL support::
     # Enable both CUDA and OpenCL
     pip3 install primitiv --global-option --enable-cuda --global-option --enable-opencl
 
+
 Notes
 -----
 
-According to the ``manylinux1`` policy described in
-`PEP 513 <https://www.python.org/dev/peps/pep-0513/>`_, binary packages
-are required to depend only on an extremely limited set of external shared libraries.
-Most users may install *primitiv* with CUDA and/or OpenCL backends that are not supported in
-the ``manylinux1`` policy. For now, we provide only a source pacakge.
+For now, we provide only a source pacakge, and ``pip`` command
+downloads a source package and builds it before installing.
+This is useful for users to install this library with CUDA/OpenCL backends
+while keeping compatibility with the ``manylinux1`` standard described in
+`PEP 513 <https://www.python.org/dev/peps/pep-0513/>`_.
+
 
 Resources
 ---------
