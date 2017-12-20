@@ -85,24 +85,6 @@ class TensorFunctionsTest(unittest.TestCase):
         x = tF.input(input_arr)
         self.assertTrue(((x ** 0x7fffffff).to_ndarrays()[0] == np.array([1, -1])).all())
         self.assertTrue(((x ** -0x80000000).to_ndarrays()[0] == np.array([1, 1])).all())
-        # NOTE(vbkaisetsu):
-        # functions::pow(x, y) was reimplemented and returns a normal number for negative x
-        # if y is an integer.
-        # BTW, 0x80000001 is a large number, and the number of significant digits will be
-        # reduced by casting to float. Therefore, the following test does not return
-        # mathematically expected results.
-        #
-        # Previous (until 2017-12-20):
-        # self.assertTrue(np.isnan((x ** 0x80000000).to_ndarrays()[0]).any())
-        # self.assertTrue(np.isnan((x ** -0x80000001).to_ndarrays()[0]).any())
-        #
-        # Mathematically expected:
-        # self.assertTrue(((x ** 0x80000000).to_ndarrays()[0] == np.array([1, 1])).all())
-        # self.assertTrue(((x ** -0x80000001).to_ndarrays()[0] == np.array([1, -1])).all())
-        #
-        # Actual:
-        self.assertTrue(((x ** 0x80000000).to_ndarrays()[0] == np.array([1, 1])).all())
-        self.assertTrue(((x ** -0x80000001).to_ndarrays()[0] == np.array([1, 1])).all())
 
         self.assertRaises(TypeError, lambda: pow(x, y, 2))
 
