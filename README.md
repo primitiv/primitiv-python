@@ -9,7 +9,7 @@
 Python Frontend of primitiv
 ===========================
 
-This frontend is compatible with **primitiv core library 0.3.x**.
+This frontend is compatible with **primitiv core library 0.4.x**.
 
 Dependencies
 ------------

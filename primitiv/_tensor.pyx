@@ -5,7 +5,7 @@ from primitiv._device cimport Device
 from primitiv._shape cimport Shape, wrapShape, normShape
 from primitiv._function cimport (
     func_positive, func_negative, func_add, func_subtract, func_multiply,
-    func_divide, func_pow, func_ipow, func_matmul,
+    func_divide, func_pow, func_pown, func_matmul,
 )
 
 from weakref import WeakValueDictionary
@@ -259,7 +259,7 @@ cdef class Tensor:
         if mod is not None:
             return NotImplemented
         if isinstance(right, int) and -0x80000000 <= right <= 0x7fffffff:
-            return Tensor.get_wrapper_with_new(new CppTensor(func_ipow((<Tensor> left).wrapped[0], <int> right)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_pown((<Tensor> left).wrapped[0], <int> right)))
         elif isinstance(right, (int, float)):
             return Tensor.get_wrapper_with_new(new CppTensor(func_pow((<Tensor> left).wrapped[0], <float> right)))
         elif isinstance(left, (int, float)):
