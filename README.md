@@ -17,6 +17,7 @@ Dependencies
 * Python 3 (3.5 or later)
 * NumPy (1.11.0 or later)
 * Cython (0.27 or later)
+* CMake (3.1.0 or later)
 * scikit-build (0.6.1 or later, only for building)
 * (optional) CUDA (7.5 or later)
 * (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
@@ -29,7 +30,7 @@ Getting Started
 To install primitiv without CUDA and OpenCL, run the following commands:
 
 ```
-$ pip3 install numpy cython scikit-build [--user]
+$ pip3 install numpy cython cmake scikit-build [--user]
 $ pip3 install primitiv [--user]
 ```
 
@@ -51,10 +52,10 @@ while keeping compatibility with the `manylinux1` standard described in
 
 ### Compiling Step by Step
 
-1. Install NumPy, Cython and scikit-build with Python 3
+1. Install NumPy, Cython, CMake and scikit-build with Python 3
 
 ```
-$ sudo pip3 install numpy cython scikit-build
+$ sudo pip3 install numpy cython cmake scikit-build
 ```
 
 2. Run following commands in `primitiv-python` directory:
