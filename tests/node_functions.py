@@ -88,6 +88,5 @@ class NodeFunctionsTest(unittest.TestCase):
         x = F.input(input_arr)
         self.assertTrue(((x ** 0x7fffffff).to_ndarrays()[0] == np.array([1, -1])).all())
         self.assertTrue(((x ** -0x80000000).to_ndarrays()[0] == np.array([1, 1])).all())
-        self.assertTrue(np.isnan((x ** 0x80000000).to_ndarrays()[0]).any())
-        self.assertTrue(np.isnan((x ** -0x80000001).to_ndarrays()[0]).any())
+
         self.assertRaises(TypeError, lambda: pow(x, y, 2))

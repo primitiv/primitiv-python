@@ -25,7 +25,7 @@ cdef extern from "primitiv/functions.h":
     Var func_sqrt "primitiv::functions::sqrt" [Var](const Var &x) except +
     Var func_exp "primitiv::functions::exp" [Var](const Var &x) except +
     Var func_log "primitiv::functions::log" [Var](const Var &x) except +
-    Var func_ipow "primitiv::functions::ipow" [Var](const Var &x, int k) except +
+    Var func_pown "primitiv::functions::pown" [Var](const Var &x, int k) except +
     Var func_pow "primitiv::functions::pow" [Var](const Var &x, float k) except +
     Var func_pow "primitiv::functions::pow" [Var](float x, const Var &k) except +
     Var func_pow "primitiv::functions::pow" [Var](const Var &x, const Var &k) except +

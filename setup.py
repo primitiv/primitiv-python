@@ -9,7 +9,7 @@ import numpy as np
 
 from Cython.Build import build_ext
 
-VERSION = "0.3.1"
+VERSION = "0.4.0"
 
 SUBMODULE_DIR = "primitiv-core"
 SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")

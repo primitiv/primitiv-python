@@ -6,7 +6,7 @@ from primitiv._shape cimport wrapShape
 from primitiv._tensor cimport Tensor
 from primitiv._function cimport (
     func_positive, func_negative, func_add, func_subtract, func_multiply,
-    func_divide, func_pow, func_ipow, func_matmul,
+    func_divide, func_pow, func_pown, func_matmul,
 )
 from primitiv.config cimport pystr_to_cppstr, cppstr_to_pystr
 
@@ -238,7 +238,7 @@ cdef class Node:
         if mod is not None:
             return NotImplemented
         if isinstance(right, int) and -0x80000000 <= right <= 0x7fffffff:
-            return wrapNode(func_ipow((<Node> left).wrapped, <int> right))
+            return wrapNode(func_pown((<Node> left).wrapped, <int> right))
         elif isinstance(right, (int, float)):
             return wrapNode(func_pow((<Node> left).wrapped, <float> right))
         elif isinstance(left, (int, float)):

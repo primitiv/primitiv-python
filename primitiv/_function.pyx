@@ -100,7 +100,7 @@ class functions:
     @staticmethod
     def pow(x, k):
         if isinstance(x, Node) and isinstance(k, int) and -0x80000000 <= k <= 0x7fffffff:
-            return wrapNode(func_ipow((<Node> x).wrapped, <int> k))
+            return wrapNode(func_pown((<Node> x).wrapped, <int> k))
         elif isinstance(x, Node) and isinstance(k, (int, float)):
             return wrapNode(func_pow((<Node> x).wrapped, <float> k))
         elif isinstance(x, (int, float)) and isinstance(k, Node):
@@ -354,7 +354,7 @@ class tensor_functions:
     @staticmethod
     def pow(x, k):
         if isinstance(x, Tensor) and isinstance(k, int) and -0x80000000 <= k <= 0x7fffffff:
-            return Tensor.get_wrapper_with_new(new CppTensor(func_ipow((<Tensor> x).wrapped[0], <int> k)))
+            return Tensor.get_wrapper_with_new(new CppTensor(func_pown((<Tensor> x).wrapped[0], <int> k)))
         elif isinstance(x, Tensor) and isinstance(k, (int, float)):
             return Tensor.get_wrapper_with_new(new CppTensor(func_pow((<Tensor> x).wrapped[0], <float> k)))
         elif isinstance(x, (int, float)) and isinstance(k, Tensor):
