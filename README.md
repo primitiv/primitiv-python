@@ -18,7 +18,7 @@ Dependencies
 * NumPy (1.11.0 or later)
 * Cython (0.27 or later)
 * CMake (3.1.0 or later)
-* scikit-build (0.6.1 or later, only for building)
+* scikit-build (0.6.1 or later)
 * (optional) CUDA (7.5 or later)
 * (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
 
