@@ -20,7 +20,7 @@ cdef extern from "primitiv/shape.h":
         bool has_batch() except +
         bool has_compatible_batch(const CppShape &rhs) except +
         bool is_scalar() except +
-        bool is_row_vector() except +
+        bool is_column_vector() except +
         bool is_matrix() except +
         bool has_same_dims(const CppShape &rhs) except +
         bool has_same_loo_dims(const CppShape &rhs, unsigned dim) except +
