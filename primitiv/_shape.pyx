@@ -131,14 +131,14 @@ cdef class Shape:
         """
         return self.wrapped.is_scalar()
 
-    def is_row_vector(self):
-        """Checks whether the shape is a row vector or not.
+    def is_column_vector(self):
+        """Checks whether the shape is a column vector or not.
 
-        :return: ``True`` if the shape is a row vector, ``False`` otherwise.
+        :return: ``True`` if the shape is a column vector, ``False`` otherwise.
         :rtype: bool
 
         """
-        return self.wrapped.is_row_vector()
+        return self.wrapped.is_column_vector()
 
     def is_matrix(self):
         """Checks whether the shape is a vector or a matrix, or not.
