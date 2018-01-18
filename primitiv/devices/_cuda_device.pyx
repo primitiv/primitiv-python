@@ -37,7 +37,7 @@ cdef class CUDA(Device):
         return CppCUDA.num_devices()
 
     @staticmethod
-    def check_support(device_id):
+    def check_support(unsigned device_id):
         """Checks whether the device corresponding to the specified ID is
         supported.
 
