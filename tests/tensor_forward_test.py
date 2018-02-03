@@ -521,7 +521,6 @@ class TensorForwardTest(unittest.TestCase):
             self.assertEqual(Shape([2, 2], 2), y2.shape())
             self.assertTrue(np.isclose(y2_data, y2.to_list()).all())
 
-
     def test_TensorForwardTest_CheckSubtractScalarBatchBroadcast(self):
         x_data = [1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001]
         k_data = [1]
@@ -1051,9 +1050,9 @@ class TensorForwardTest(unittest.TestCase):
             y1 = tF.pow(x, 0x7fffffff)
             y2 = x ** 0x7fffffff
             self.assertEqual(Shape([2, 3], 2), y1.shape())
-            self.assertEqual(y_data, y1.to_list())
+            self.assertTrue(np.isclose(y_data, y1.to_list()).all())
             self.assertEqual(Shape([2, 3], 2), y2.shape())
-            self.assertEqual(y_data, y2.to_list())
+            self.assertTrue(np.isclose(y_data, y2.to_list()).all())
 
     def test_TensorForwardTest_CheckIPowLowerBound(self):
         x_data = [
@@ -1069,9 +1068,9 @@ class TensorForwardTest(unittest.TestCase):
             y1 = tF.pow(x, -2147483648) # 0x80000000
             y2 = x ** -2147483648
             self.assertEqual(Shape([2, 3], 2), y1.shape())
-            self.assertEqual(y_data, y1.to_list())
+            self.assertTrue(np.isclose(y_data, y1.to_list()).all())
             self.assertEqual(Shape([2, 3], 2), y2.shape())
-            self.assertEqual(y_data, y2.to_list())
+            self.assertTrue(np.isclose(y_data, y2.to_list()).all())
 
     def test_TensorForwardTest_CheckIPowPositiveConvergence(self):
         x_data = [
@@ -1621,12 +1620,18 @@ class TensorForwardTest(unittest.TestCase):
 
     def run_test_conv2d(self, x_shape, x_data, w_shape, w_data, y_shape, y_data, pad0, pad1, str0, str1, dil0, dil1):
         for dev in TensorForwardTest.devices:
-            x = tF.raw_input(x_shape, x_data, dev)
-            w = tF.raw_input(w_shape, w_data, dev)
-            y = tF.conv2d(x, w, pad0, pad1, str0, str1, dil0, dil1)
-            self.assertEqual(y_shape, y.shape())
-            self.assertTrue(np.isclose(y_data, y.to_list()).all)
-
+            try:
+                x = tF.raw_input(x_shape, x_data, dev)
+                w = tF.raw_input(w_shape, w_data, dev)
+                y = tF.conv2d(x, w, pad0, pad1, str0, str1, dil0, dil1)
+                self.assertEqual(y_shape, y.shape())
+                self.assertTrue(np.isclose(y_data, y.to_list()).all)
+            except RuntimeError as e:
+                # TODO(vbkaisetsu):
+                # We have to implement a better method to detect
+                # NotImplementedError in Python
+                if "Not implemented" not in str(e):
+                    raise
 
     def test_TensorForwardTest_CheckConv2D_1x1x1_1x1x1x1(self):
         x_data = [123]
@@ -1637,7 +1642,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x1x1_1x1x1x1(self):
         x_data = list(range(1, 5 + 1))
         w_data = [42]
@@ -1646,7 +1650,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([])
         y_shape = Shape([5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x1x1_2x1x1x1(self):
         x_data = list(range(1, 5 + 1))
@@ -1657,7 +1660,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x1x1_5x1x1x1(self):
         x_data = list(range(1, 5 + 1))
         w_data = list(range(1, 5 + 1))
@@ -1666,7 +1668,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([5])
         y_shape = Shape([])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_1x5x1_1x1x1x1(self):
         x_data = list(range(1, 5 + 1))
@@ -1677,7 +1678,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_1x5x1_1x2x1x1(self):
         x_data = list(range(1, 5 + 1))
         w_data = list(range(1, 2 + 1))
@@ -1687,7 +1687,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_1x5x1_1x5x1x1(self):
         x_data = list(range(1, 5 + 1))
         w_data = list(range(1, 5 + 1))
@@ -1696,7 +1695,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([1, 5])
         y_shape = Shape([])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_1x1x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1713,7 +1711,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([5, 5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x1x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 + 1))
@@ -1728,7 +1725,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2])
         y_shape = Shape([4, 5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_5x1x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1745,7 +1741,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_1x2x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 + 1))
@@ -1759,7 +1754,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([1, 2])
         y_shape = Shape([5, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1775,7 +1769,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_5x2x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 5 * 2 + 1))
@@ -1790,7 +1783,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_1x5x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 1 * 5 + 1))
@@ -1801,7 +1793,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([1, 5])
         y_shape = Shape([5])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x5x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1814,7 +1805,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_5x5x1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 5 * 5 + 1))
@@ -1823,7 +1813,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([5, 5])
         y_shape = Shape([])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x3_2x2x3x1(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
@@ -1838,7 +1827,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2, 2, 3])
         y_shape = Shape([4, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x3(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1865,7 +1853,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4, 3])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x3_2x2x3x3(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
         w_data = list(range(1, 2 * 2 * 3 * 3 + 1))
@@ -1891,7 +1878,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4, 3])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Padding10(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -1905,7 +1891,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2, 2])
         y_shape = Shape([6, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 1, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Padding01(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1923,7 +1908,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 6])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 1, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Padding11(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -1940,7 +1924,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([6, 6])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 1, 1, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Stride21(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -1955,7 +1938,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([2, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 2, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Stride12(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -1968,7 +1950,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 2])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 2, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Stride22(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -1980,7 +1961,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2, 2])
         y_shape = Shape([2, 2])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 2, 2, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Dilation21(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -1996,7 +1976,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([3, 4])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 2, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Dilation12(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -2010,7 +1989,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 3])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 2)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_Dilation22(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 + 1))
@@ -2023,7 +2001,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2, 2])
         y_shape = Shape([3, 3])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 2, 2)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_N1(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
@@ -2050,7 +2027,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4], 3)
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_1N(self):
         x_data = list(range(1, 5 * 5 + 1))
         w_data = list(range(1, 2 * 2 * 3 + 1))
@@ -2075,7 +2051,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([2, 2], 3)
         y_shape = Shape([4, 4], 3)
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckConv2D_5x5x1_2x2x1x1_NN(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
@@ -2102,7 +2077,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4], 3)
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 0, 0, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckConv2D_VGG16FirstLayer(self):
         x_data = [1] * (224 * 224 * 3)
         w_data = [1] * (3 * 3 * 3 * 64)
@@ -2122,7 +2096,6 @@ class TensorForwardTest(unittest.TestCase):
         w_shape = Shape([3, 3, 3, 64])
         y_shape = Shape([224, 224, 64])
         self.run_test_conv2d(x_shape, x_data, w_shape, w_data, y_shape, y_data, 1, 1, 1, 1, 1, 1)
-
 
     def test_TensorForwardTest_CheckInvalidConv2D(self):
         test_cases = [
@@ -2172,20 +2145,32 @@ class TensorForwardTest(unittest.TestCase):
                 x = tF.constant(tc[0], 0, dev)
                 w = tF.constant(tc[1], 0, dev)
                 if tc[8]:
-                    tF.conv2d(x, w, tc[2], tc[3], tc[4], tc[5], tc[6], tc[7])
+                    try:
+                        tF.conv2d(x, w, tc[2], tc[3], tc[4], tc[5], tc[6], tc[7])
+                    except RuntimeError as e:
+                        # TODO(vbkaisetsu):
+                        # We have to implement a better method to detect
+                        # NotImplementedError in Python
+                        if "Not implemented" not in str(e):
+                            raise
                 else:
                     with self.assertRaises(RuntimeError) as e:
                         tF.conv2d(x, w, tc[2], tc[3], tc[4], tc[5], tc[6], tc[7])
 
-
     def run_test_max_pool2d(self, x_shape, x_data, y_shape, y_data, win0, win1, pad0, pad1, str0, str1):
         for dev in TensorForwardTest.devices:
-            print(dev)
-            x = tF.raw_input(x_shape, x_data, dev)
-            y = tF.max_pool2d(x, win0, win1, pad0, pad1, str0, str1)
-            self.assertEqual(y_shape, y.shape())
-            self.assertTrue(np.isclose(y_data, y.to_list()).all)
-
+            try:
+                print(dev)
+                x = tF.raw_input(x_shape, x_data, dev)
+                y = tF.max_pool2d(x, win0, win1, pad0, pad1, str0, str1)
+                self.assertEqual(y_shape, y.shape())
+                self.assertTrue(np.isclose(y_data, y.to_list()).all)
+            except RuntimeError as e:
+                # TODO(vbkaisetsu):
+                # We have to implement a better method to detect
+                # NotImplementedError in Python
+                if "Not implemented" not in str(e):
+                    raise
 
     def test_TensorForwardTest_CheckMaxPool2D_1x1x1_1x1(self):
         x_data = [123]
@@ -2194,14 +2179,12 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 1, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x1x1_1x1(self):
         x_data = list(range(1, 5 + 1))
         y_data = [1, 2, 3, 4, 5]
         x_shape = Shape([5])
         y_shape = Shape([5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 1, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x1x1_2x1(self):
         x_data = list(range(1, 5 + 1))
@@ -2210,14 +2193,12 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 1, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x1x1_5x1(self):
         x_data = list(range(1, 5 + 1))
         y_data = [5]
         x_shape = Shape([5])
         y_shape = Shape([])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 5, 1, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_1x5x1_1x1(self):
         x_data = list(range(1, 5 + 1))
@@ -2226,7 +2207,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 1, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_1x5x1_1x2(self):
         x_data = list(range(1, 5 + 1))
         y_data = [2, 3, 4, 5]
@@ -2234,14 +2214,12 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 2, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_1x5x1_1x5(self):
         x_data = list(range(1, 5 + 1))
         y_data = [5]
         x_shape = Shape([1, 5])
         y_shape = Shape([])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 5, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_1x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -2256,7 +2234,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([5, 5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 1, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x1(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2269,7 +2246,6 @@ class TensorForwardTest(unittest.TestCase):
         x_shape = Shape([5, 5])
         y_shape = Shape([4, 5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 1, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_5x1(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -2284,7 +2260,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 5, 1, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_1x2(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2296,7 +2271,6 @@ class TensorForwardTest(unittest.TestCase):
         x_shape = Shape([5, 5])
         y_shape = Shape([5, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 2, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -2310,7 +2284,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_5x2(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2323,7 +2296,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([1, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 5, 2, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_1x5(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2332,7 +2304,6 @@ class TensorForwardTest(unittest.TestCase):
         x_shape = Shape([5, 5])
         y_shape = Shape([5])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 1, 5, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x5(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -2343,14 +2314,12 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 5, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_5x5(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [25]
         x_shape = Shape([5, 5])
         y_shape = Shape([])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 5, 5, 0, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x3_2x2(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
@@ -2375,7 +2344,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4, 3])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Padding10(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2387,7 +2355,6 @@ class TensorForwardTest(unittest.TestCase):
         x_shape = Shape([5, 5])
         y_shape = Shape([6, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 1, 0, 1, 1)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Padding01(self):
         x_data = list(range(1, 5 * 5 + 1))
@@ -2403,7 +2370,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 6])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Padding11(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2418,7 +2384,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([6, 6])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 1, 1, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Stride21(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2431,7 +2396,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([2, 4])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 2, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Stride12(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2442,7 +2406,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 2])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 1, 2)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_Stride22(self):
         x_data = list(range(1, 5 * 5 + 1))
         y_data = [
@@ -2452,7 +2415,6 @@ class TensorForwardTest(unittest.TestCase):
         x_shape = Shape([5, 5])
         y_shape = Shape([2, 2])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 2, 2)
-
 
     def test_TensorForwardTest_CheckMaxPool2D_5x5x1_2x2_N(self):
         x_data = list(range(1, 5 * 5 * 3 + 1))
@@ -2477,7 +2439,6 @@ class TensorForwardTest(unittest.TestCase):
         y_shape = Shape([4, 4], 3)
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 1, 1)
 
-
     def test_TensorForwardTest_CheckMaxPool2D_VGG16ThirdLayer(self):
         # NOTE(odashi): 224*224*64 < 2^23 (float precision)
         x_data = list(range(1, 224 * 224 * 64 + 1))
@@ -2488,11 +2449,9 @@ class TensorForwardTest(unittest.TestCase):
                 x_ofs = b_ofs + (2 * x + 1) * 224
                 for y in range(112):
                     y_data[y + b * 112 * 112 + x * 112] = x_ofs + 2 * y + 2
-
         x_shape = Shape([224, 224, 64])
         y_shape = Shape([112, 112, 64])
         self.run_test_max_pool2d(x_shape, x_data, y_shape, y_data, 2, 2, 0, 0, 2, 2)
-
 
     def test_TensorForwardTest_CheckInvalidPool2D(self):
         test_cases = [
@@ -2520,12 +2479,18 @@ class TensorForwardTest(unittest.TestCase):
             (Shape([3, 3]), 3, 4, 0, 0, 2, 2, False),
             (Shape([3, 3]), 4, 4, 0, 0, 2, 2, False),
         ]
-
         for dev in TensorForwardTest.devices:
             for tc in test_cases:
                 x = tF.constant(tc[0], 0, dev)
                 if tc[7]:
-                    tF.max_pool2d(x, tc[1], tc[2], tc[3], tc[4], tc[5], tc[6])
+                    try:
+                        tF.max_pool2d(x, tc[1], tc[2], tc[3], tc[4], tc[5], tc[6])
+                    except RuntimeError as e:
+                        # TODO(vbkaisetsu):
+                        # We have to implement a better method to detect
+                        # NotImplementedError in Python
+                        if "Not implemented" not in str(e):
+                            raise
                 else:
                     with self.assertRaises(RuntimeError) as e:
                         tF.max_pool2d(x, tc[1], tc[2], tc[3], tc[4], tc[5], tc[6])
