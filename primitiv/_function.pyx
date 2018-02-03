@@ -206,14 +206,20 @@ class functions:
         return wrapNode(func_stop_gradient(x.wrapped))
 
     @staticmethod
-    def conv2d(Node x, Node w, unsigned padding0, unsigned padding1, unsigned stride0, unsigned stride1, unsigned dilation0, unsigned dilation1):
+    def conv2d(Node x, Node w,
+               unsigned padding0, unsigned padding1,
+               unsigned stride0, unsigned stride1,
+               unsigned dilation0, unsigned dilation1):
         return wrapNode(func_conv2d(x.wrapped, w.wrapped,
                                     padding0, padding1,
                                     stride0, stride1,
                                     dilation0, dilation1))
 
     @staticmethod
-    def max_pool2d(Node x, unsigned window0, unsigned window1, unsigned padding0, unsigned padding1, unsigned stride0, unsigned stride1):
+    def max_pool2d(Node x,
+                   unsigned window0, unsigned window1,
+                   unsigned padding0, unsigned padding1,
+                   unsigned stride0, unsigned stride1):
         return wrapNode(func_max_pool2d(x.wrapped,
                                         window0, window1,
                                         padding0, padding1,
@@ -474,14 +480,20 @@ class tensor_functions:
         return Tensor.get_wrapper_with_new(new CppTensor(func_stop_gradient(x.wrapped[0])))
 
     @staticmethod
-    def conv2d(Tensor x, Tensor w, unsigned padding0, unsigned padding1, unsigned stride0, unsigned stride1, unsigned dilation0, unsigned dilation1):
+    def conv2d(Tensor x, Tensor w,
+               unsigned padding0, unsigned padding1,
+               unsigned stride0, unsigned stride1,
+               unsigned dilation0, unsigned dilation1):
         return Tensor.get_wrapper_with_new(new CppTensor(func_conv2d(x.wrapped[0], w.wrapped[0],
                                                                      padding0, padding1,
                                                                      stride0, stride1,
                                                                      dilation0, dilation1)))
 
     @staticmethod
-    def max_pool2d(Tensor x, unsigned window0, unsigned window1, unsigned padding0, unsigned padding1, unsigned stride0, unsigned stride1):
+    def max_pool2d(Tensor x,
+                   unsigned window0, unsigned window1,
+                   unsigned padding0, unsigned padding1,
+                   unsigned stride0, unsigned stride1):
         return Tensor.get_wrapper_with_new(new CppTensor(func_max_pool2d(x.wrapped[0],
                                                                          window0, window1,
                                                                          padding0, padding1,
