@@ -25,7 +25,7 @@ Prerequisites:
 - (optional) CUDA (7.5 or later)
 - (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
 
-Install dependencies::
+Install required packages::
 
     pip3 install numpy cython cmake scikit-build
 
@@ -45,15 +45,15 @@ Build and install primitiv with CUDA and/or OpenCL support::
 Notes
 -----
 
-For now, we provide only a source pacakge, and ``pip`` command
-downloads a source package and builds it before installing.
-This is useful for users to install this library with CUDA/OpenCL backends
-while keeping compatibility with the ``manylinux1`` standard described in
-`PEP 513 <https://www.python.org/dev/peps/pep-0513/>`_.
+We are providing only a source pacakge for now, and ``pip`` command
+downloads the source package and builds it before installing.
+This is mainly because of keeping compatibility with the ``manylinux1`` standard
+described in `PEP 513 <https://www.python.org/dev/peps/pep-0513/>`_
+while maintaining supports of non-standard backends such as CUDA/OpenCL.
 
 
 Resources
 ---------
 
-* `Homepage <https://github.com/primitiv/primitiv-python>`_
+* `Official repository <https://github.com/primitiv/primitiv-python>`_
 * `Examples <https://github.com/primitiv/primitiv-python/tree/develop/examples>`_
