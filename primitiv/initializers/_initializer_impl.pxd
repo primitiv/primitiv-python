@@ -17,6 +17,9 @@ cdef extern from "primitiv/initializer_impl.h":
     cdef cppclass CppXavierUniform "primitiv::initializers::XavierUniform" (CppInitializer):
         CppXavierUniform(float scale)
 
+    cdef cppclass CppXavierUniformConv2D "primitiv::initializers::XavierUniformConv2D" (CppInitializer):
+        CppXavierUniformConv2D(float scale)
+
     cdef cppclass CppXavierNormal "primitiv::initializers::XavierNormal" (CppInitializer):
         CppXavierNormal(float scale)
 
@@ -34,6 +37,9 @@ cdef class Identity(Initializer):
     pass
 
 cdef class XavierUniform(Initializer):
+    pass
+
+cdef class XavierUniformConv2D(Initializer):
     pass
 
 cdef class XavierNormal(Initializer):
