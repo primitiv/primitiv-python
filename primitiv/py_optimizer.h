@@ -34,7 +34,7 @@ public:
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
-      THROW_ERROR("error: get_configs");
+      PRIMITIV_THROW_ERROR("error: get_configs");
     }
     Optimizer::get_configs(uint_configs, float_configs);
   }
@@ -46,7 +46,7 @@ public:
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
-      THROW_ERROR("error: set_configs");
+      PRIMITIV_THROW_ERROR("error: set_configs");
     }
   }
 
@@ -55,7 +55,7 @@ public:
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
-      THROW_ERROR("error: configure_parameter");
+      PRIMITIV_THROW_ERROR("error: configure_parameter");
     }
   }
 
@@ -64,7 +64,7 @@ public:
     if (ret == -1) {
       // NOTE(vbkaisetsu): This is just a trigger of throwing an error.
       // This message is not passed to Python.
-      THROW_ERROR("error: update_parameter");
+      PRIMITIV_THROW_ERROR("error: update_parameter");
     }
   }
 

@@ -3,6 +3,7 @@
 import os
 import sys
 
+from distutils.dir_util import copy_tree
 from setuptools.extension import Extension
 
 import numpy as np
@@ -12,13 +13,23 @@ from Cython.Build import build_ext
 VERSION = "0.4.0"
 
 SUBMODULE_DIR = "primitiv-core"
+EIGEN_DIR = "eigen-headers"
+
 SUBMODULE_CMAKELIST = os.path.join(SUBMODULE_DIR, "CMakeLists.txt")
+EIGEN_HEADER_DIR = os.path.join(EIGEN_DIR, "Eigen")
 
 build_number = os.getenv("PRIMITIV_PYTHON_BUILD_NUMBER")
 if build_number is not None:
     version_full = VERSION + "." + build_number
 else:
     version_full = VERSION
+
+bundle_eigen_headers = False
+if "--bundle-eigen-headers" in sys.argv:
+    i = sys.argv.index("--bundle-eigen-headers")
+    sys.argv.pop(i)
+    eigen_path = sys.argv.pop(i)
+    copy_tree(eigen_path, EIGEN_DIR)
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,6 +38,13 @@ if "--no-build-core-library" in sys.argv:
     sys.argv.remove("--no-build-core-library")
 else:
     build_core = os.path.exists(os.path.join(dirname, SUBMODULE_CMAKELIST))
+
+eigen_bundled_exists = os.path.exists(os.path.join(dirname, EIGEN_HEADER_DIR))
+if "--disable-eigen" in sys.argv:
+    enable_eigen = False
+    sys.argv.remove("--disable-eigen")
+else:
+    enable_eigen = eigen_bundled_exists
 
 if build_core:
     from skbuild import setup
@@ -50,6 +68,10 @@ enable_cuda = False
 if "--enable-cuda" in sys.argv:
     enable_cuda = True
     sys.argv.remove("--enable-cuda")
+
+if "--enable-eigen" in sys.argv:
+    enable_eigen = True
+    sys.argv.remove("--enable-eigen")
 
 enable_opencl = False
 if "--enable-opencl" in sys.argv:
@@ -130,6 +152,14 @@ if enable_cuda:
         )
     )
 
+if enable_eigen:
+    ext_modules.append(
+        ext_common_args(
+            "primitiv.devices._eigen_device",
+            sources=["primitiv/devices/_eigen_device.pyx"],
+        )
+    )
+
 if enable_opencl:
     ext_modules.append(
         ext_common_args(
@@ -150,6 +180,10 @@ if build_core:
     setup_kwargs["cmake_args"] = ["-DPRIMITIV_BUILD_STATIC_LIBRARY=ON"]
     if enable_cuda:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_CUDA=ON")
+    if enable_eigen:
+        setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_EIGEN=ON")
+        if eigen_bundled_exists:
+            setup_kwargs["cmake_args"].append("-DEIGEN3_INCLUDE_DIR=%s" % os.path.join(dirname, EIGEN_DIR))
     if enable_opencl:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_OPENCL=ON")
 
@@ -158,6 +192,8 @@ with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
     print("recursive-include primitiv *.pyx *.pxd", file=fp)
     if bundle_core_library:
         print("recursive-include %s *" % SUBMODULE_DIR, file=fp)
+    if bundle_eigen_headers:
+        print("recursive-include %s *" % EIGEN_DIR, file=fp)
 
 setup(
     name="primitiv",
