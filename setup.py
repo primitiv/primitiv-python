@@ -30,6 +30,7 @@ if "--bundle-eigen-headers" in sys.argv:
     sys.argv.pop(i)
     eigen_path = sys.argv.pop(i)
     copy_tree(eigen_path, EIGEN_DIR)
+    bundle_eigen_headers = True
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
@@ -193,7 +194,8 @@ with open(os.path.join(dirname, "MANIFEST.in"), "w") as fp:
     if bundle_core_library:
         print("recursive-include %s *" % SUBMODULE_DIR, file=fp)
     if bundle_eigen_headers:
-        print("recursive-include %s *" % EIGEN_DIR, file=fp)
+        print("include %s/COPYING.* %s/README.md" % (EIGEN_DIR, EIGEN_DIR), file=fp)
+        print("recursive-include %s *" % EIGEN_HEADER_DIR, file=fp)
 
 setup(
     name="primitiv",

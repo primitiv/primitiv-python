@@ -22,6 +22,7 @@ Dependencies
 * CMake (3.1.0 or later)
 * scikit-build (0.6.1 or later)
 * (optional) CUDA (7.5 or later)
+* (optional) Eigen (Eigen 3.3.0  or later)
 * (optional) OpenCL (1.2 or later) and OpenCL C++ binding v2
 
 
@@ -40,6 +41,9 @@ $ pip3 install primitiv [--user]
 To enable CUDA and/or OpenCL support, specify `--enable-cuda` or
 `--enable-opencl` with `--global-option` flag.
 
+Eigen is bundled in the package contained in PyPI. Use `--disable-eigen` flag,
+if you want to disable `Eigen` device.
+
 We are providing only a source pacakge for now, and `pip` command
 downloads the source package and builds it before installing.
 This is mainly because of keeping compatibility with the `manylinux1` standard
@@ -53,9 +57,9 @@ $ git clone https://github.com/primitiv/primitiv-python
 $ cd primitiv-python
 $ git submodule update --init
 $ pip3 install -r requirements.txt
-$ python3 ./setup.py build [--enable-cuda] [--enable-opencl]
-$ python3 ./setup.py test [--enable-cuda] [--enable-opencl] # (optional)
-$ python3 ./setup.py install [--user] [--enable-cuda] [--enable-opencl]
+$ python3 ./setup.py build [--enable-cuda] [--enable-eigen] [--enable-opencl]
+$ python3 ./setup.py test [--enable-cuda] [--enable-eigen] [--enable-opencl] # (optional)
+$ python3 ./setup.py install [--user] [--enable-cuda] [--enable-eigen] [--enable-opencl]
 ```
 
 *primitiv-python* repository contains the core library as a git submodule.
