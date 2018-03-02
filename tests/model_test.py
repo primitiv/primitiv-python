@@ -33,16 +33,14 @@ class ModelTest(unittest.TestCase):
         p3 = Parameter()
 
         m.add("p1", p1)
-        with self.assertRaises(RuntimeError):
-            m.add("p1", p1)
+        m.add("p1", p1)
         with self.assertRaises(RuntimeError):
             m.add("x", p1)
 
         with self.assertRaises(RuntimeError):
             m.add("p1", p2)
         m.add("p2", p2)
-        with self.assertRaises(RuntimeError):
-            m.add("p2", p2)
+        m.add("p2", p2)
         with self.assertRaises(RuntimeError):
             m.add("x", p2)
 
@@ -51,8 +49,7 @@ class ModelTest(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             m.add("p2", p3)
         m.add("p3", p3)
-        with self.assertRaises(RuntimeError):
-            m.add("p3", p3)
+        m.add("p3", p3)
         with self.assertRaises(RuntimeError):
             m.add("x", p3)
 
@@ -65,8 +62,7 @@ class ModelTest(unittest.TestCase):
 
         m.add("p1", p1)
         m.add("sm1", sm1)
-        with self.assertRaises(RuntimeError):
-            m.add("sm1", sm1)
+        m.add("sm1", sm1)
         with self.assertRaises(RuntimeError):
             m.add("x", sm1)
 
@@ -81,8 +77,7 @@ class ModelTest(unittest.TestCase):
 
         m.add("p2", p2)
         m.add("sm2", sm2)
-        with self.assertRaises(RuntimeError):
-            m.add("sm2", sm2)
+        m.add("sm2", sm2)
         with self.assertRaises(RuntimeError):
             m.add("x", sm2)
 
