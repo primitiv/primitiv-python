@@ -3,7 +3,7 @@ set -xe
 
 # install
 brew update
-brew install python3
+brew upgrade python
 pip3 install cython numpy scikit-build
 
 pushd $TRAVIS_BUILD_DIR
