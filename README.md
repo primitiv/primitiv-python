@@ -41,7 +41,7 @@ $ pip3 install primitiv [--user]
 To enable CUDA and/or OpenCL support, specify `--enable-cuda` or
 `--enable-opencl` with `--global-option` flag.
 
-Eigen is bundled in the package contained in PyPI. Use `--disable-eigen` flag,
+Eigen is bundled with the package contained in PyPI. Use `--disable-eigen` flag,
 if you want to disable `Eigen` device.
 
 We are providing only a source pacakge for now, and `pip` command
