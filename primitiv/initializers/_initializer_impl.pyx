@@ -107,7 +107,7 @@ cdef class XavierUniform(Initializer):
     def __init__(self, scale = 1.0):
         """Crates a new initializer object.
 
-        :param scale: Scale of the distribusion.
+        :param scale: Additional scaling factor of the uniform distribution.
         :type scale: float
 
         """
@@ -145,5 +145,55 @@ cdef class XavierNormal(Initializer):
         cdef CppXavierNormal *temp
         if self.wrapped_newed is not NULL:
             temp = <CppXavierNormal*> self.wrapped_newed
+            del temp
+            self.wrapped_newed = NULL
+
+
+cdef class XavierUniformConv2D(Initializer):
+    """The Xavier initialization with the uniform distribution for conv2d filters.
+
+    """
+
+    def __init__(self, scale = 1.0):
+        """Creates a new `XavierUniformConv2D` initializer.
+
+        :param scale: Additional scaling factor of the uniform distribution.
+        :type scale: float
+
+        """
+        if self.wrapped_newed is not NULL:
+            raise TypeError("__init__() has already been called.")
+        self.wrapped_newed = new CppXavierUniformConv2D(scale)
+        self.wrapped = self.wrapped_newed
+
+    def __dealloc__(self):
+        cdef CppXavierUniformConv2D *temp
+        if self.wrapped_newed is not NULL:
+            temp = <CppXavierUniformConv2D*> self.wrapped_newed
+            del temp
+            self.wrapped_newed = NULL
+
+
+cdef class XavierNormalConv2D(Initializer):
+    """The Xavier initialization with the normal distribution for conv2d filters.
+
+    """
+
+    def __init__(self, scale = 1.0):
+        """Creates a new `XavierNormalConv2D` initializer.
+
+        :param scale: Additional scaling factor of the normal distribution.
+        :type scale: float
+
+        """
+        if self.wrapped_newed is not NULL:
+            raise TypeError("__init__() has already been called.")
+        self.wrapped_newed = new CppXavierNormalConv2D(scale)
+        self.wrapped = self.wrapped_newed
+
+    def __dealloc__(self):
+        cdef CppXavierNormalConv2D *temp
+        if self.wrapped_newed is not NULL:
+            temp = <CppXavierNormalConv2D*> self.wrapped_newed
             del temp
             self.wrapped_newed = NULL
