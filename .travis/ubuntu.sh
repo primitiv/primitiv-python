@@ -28,16 +28,16 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py sdist --bundle-core-library"
 
     docker exec travis-ci bash -c "pip3 install /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-eigen --global-option --enable-opencl"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen(); dev = primitiv.devices.OpenCL()'"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 
     docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-eigen --global-option --enable-opencl"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen(); dev = primitiv.devices.OpenCL()'"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 
     # test installing by "./setup.py install"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --enable-opencl"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen(); dev = primitiv.devices.OpenCL()'"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 else
     # install core library
@@ -52,7 +52,7 @@ else
 
     # test installing by "./setup.py install"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --enable-opencl --no-build-core-library"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen(); dev = primitiv.devices.OpenCL()'"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 fi
 
