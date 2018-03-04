@@ -5,6 +5,7 @@ def available_devices():
     devices = []
     devices.extend(available_naive_devices())
     devices.extend(available_cuda_devices())
+    devices.extend(available_eigen_devices())
     devices.extend(available_opencl_devices())
     for dev in devices:
         dev.dump_description()
@@ -37,6 +38,17 @@ def available_cuda_devices():
         print("%d CUDA device(s) are not supported."
               % (num_devs - num_avail_devs), file=sys.stderr)
     return devices
+
+
+def available_eigen_devices():
+    try:
+        from primitiv.devices import Eigen
+    except ImportError:
+        return []
+    return [
+        Eigen(),
+        Eigen(),
+    ]
 
 
 def available_opencl_devices():

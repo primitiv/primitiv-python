@@ -7,7 +7,7 @@ docker run --name travis-ci -v $TRAVIS_BUILD_DIR:/primitiv-python -td fedora:lat
 
 # install
 docker exec travis-ci bash -c "dnf update -y"
-docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake python3-devel python3-numpy"
+docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake python3-devel python3-numpy eigen3-devel"
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
 # NOTE(vbkaisetsu):
@@ -32,41 +32,41 @@ docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
 if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     # script
-#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-opencl"
-#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-opencl"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test"
+#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl"
+#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen"
 
     # test installing by "pip install"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py sdist --bundle-core-library"
 
-#     docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-opencl"
-    docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive()'"
+#     docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-eigen --global-option --enable-opencl"
+    docker exec travis-ci bash -c "pip3 install --user /primitiv-python/dist/primitiv-*.tar.gz --verbose --global-option --enable-eigen"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 
     # test installing by "./setup.py install"
-#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-opencl"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install"
-    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive()'"
+#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --enable-opencl"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen"
+    docker exec travis-ci bash -c "python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 else
     # install core library
-#     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_OPENCL=ON"
-    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake ."
+#     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make install"
 
     # script
-#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-opencl --no-build-core-library"
-#     docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --enable-opencl --no-build-core-library"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --no-build-core-library"
-    docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --no-build-core-library"
+#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl --no-build-core-library"
+#     docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl --no-build-core-library"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --no-build-core-library"
+    docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --enable-eigen --no-build-core-library"
 
     # test installing by "./setup.py install"
-#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-opencl --no-build-core-library"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --no-build-core-library"
-    docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && python3 -c 'import primitiv; dev = primitiv.devices.Naive()'"
+#     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --enable-opencl --no-build-core-library"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --no-build-core-library"
+    docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 fi
 
