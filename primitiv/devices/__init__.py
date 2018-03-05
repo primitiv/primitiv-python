@@ -9,9 +9,15 @@ except ImportError:
     pass
 
 try:
+    from primitiv.devices._eigen_device import Eigen
+    __all__.append("Eigen")
+#except ModuleNotFoundError:
+except ImportError:
+    pass
+
+try:
     from primitiv.devices._opencl_device import OpenCL
     __all__.append("OpenCL")
 #except ModuleNotFoundError:
 except ImportError:
     pass
-

@@ -41,6 +41,11 @@ Build and install primitiv with CUDA and/or OpenCL support::
     # Enable both CUDA and OpenCL
     pip3 install primitiv --global-option --enable-cuda --global-option --enable-opencl
 
+``--enable-eigen`` flag that enables ``Eigen`` backend is added by default in
+the package contained in PyPI. To disable the Eigen backend, use
+``--disable-eigen`` flag. Note that Eigen is bundled with the package contained
+in PyPI.
+
 
 Notes
 -----
