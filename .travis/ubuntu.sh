@@ -11,7 +11,7 @@ docker exec travis-ci bash -c "apt install -y git build-essential cmake python3-
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
 # install OpenCL environment
-docker exec travis-ci bash -c "apt install -y opencl-headers libclblas-dev pkg-config libhwloc-dev libltdl-dev ocl-icd-dev ocl-icd-opencl-dev clang-3.8 llvm-3.8-dev libclang-3.8-dev libz-dev"
+docker exec travis-ci bash -c "apt install -y opencl-headers libclblas-dev pkg-config libhwloc-dev libltdl-dev ocl-icd-dev ocl-icd-opencl-dev clang llvm-dev libclang-dev libz-dev"
 # pocl 0.13 does not contain mem_fence() function that is used by primitiv.
 # We build the latest pocl instead of using distribution's package.
 # See: https://github.com/pocl/pocl/issues/294

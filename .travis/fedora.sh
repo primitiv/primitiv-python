@@ -7,7 +7,7 @@ docker run --name travis-ci -v $TRAVIS_BUILD_DIR:/primitiv-python -td fedora:lat
 
 # install
 docker exec travis-ci bash -c "dnf update -y"
-docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake python3-devel python3-numpy eigen3-devel"
+docker exec travis-ci bash -c "dnf install -y git rpm-build gcc-c++ cmake make python3-devel python3-numpy eigen3-devel"
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
 # NOTE(vbkaisetsu):
