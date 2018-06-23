@@ -10,6 +10,8 @@ from weakref import WeakValueDictionary
 # It means that users can not compare instances by using "is" operator.
 cdef object py_primitiv_device_weak_dict = WeakValueDictionary()
 
+cdef object py_primitiv_default_device = None
+
 
 cdef class Device:
     """Interface of the Tensor provider.
@@ -24,7 +26,18 @@ cdef class Device:
         :type device: primitiv.Device
 
         """
-        CppDevice.set_default(device.wrapped[0])
+        global py_primitiv_default_device
+        py_primitiv_default_device = device
+
+    @staticmethod
+    def get_default():
+        """Retrieves the current default device.
+
+        :return: The current default device
+        :rtype: primitiv.Device
+
+        """
+        return py_primitiv_default_device
 
     def dump_description(self):
         """Prints device description to stderr.

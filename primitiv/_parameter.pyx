@@ -81,6 +81,8 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
+        if device is None:
+            device = Device.get_default()
         self.wrapped.init(normShape(shape).wrapped, initializer.wrapped[0],
                           get_cpp_device(device))
         return
@@ -97,6 +99,8 @@ cdef class Parameter:
         :type device: primitiv.Device or None
 
         """
+        if device is None:
+            device = Device.get_default()
         self.wrapped.load(pystr_to_cppstr(path), with_stats,
                           get_cpp_device(device))
         return

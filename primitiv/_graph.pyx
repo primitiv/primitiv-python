@@ -23,6 +23,8 @@ import numpy as np
 # It means that users can not compare instances by using "is" operator.
 cdef object py_primitiv_graph_weak_dict = WeakValueDictionary()
 
+cdef object py_primitiv_default_graph = None
+
 
 cdef class Node:
     """Pointer of a node in the computation graph.
@@ -282,7 +284,18 @@ cdef class Graph:
         :type graph: primitiv.Graph
 
         """
-        CppGraph.set_default(graph.wrapped[0])
+        global py_primitiv_default_graph
+        py_primitiv_default_graph = graph
+
+    @staticmethod
+    def get_default():
+        """Retrieves the current default graph.
+
+        :return: The current default graph
+        :rtype: primitiv.Graph
+
+        """
+        return py_primitiv_default_graph
 
     def clear(self):
         """Clear all functions in the graph.

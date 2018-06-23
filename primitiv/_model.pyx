@@ -40,6 +40,8 @@ cdef class Model:
         :type device: bool or None
 
         """
+        if device is None:
+            device = Device.get_default()
         self.wrapped.load(pystr_to_cppstr(path), with_stats,
                           get_cpp_device(device))
 
