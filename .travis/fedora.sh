@@ -34,7 +34,8 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     # script
 #     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl"
 #     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl"
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen -- -DCMAKE_VERBOSE_MAKEFILE=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen -- -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen"
 
     # test installing by "pip install"
@@ -53,7 +54,7 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
 else
     # install core library
 #     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON"
-    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make install"
 
@@ -61,6 +62,7 @@ else
 #     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl --no-build-core-library"
 #     docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl --no-build-core-library"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --no-build-core-library"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen --no-build-core-library"
     docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && cd /primitiv-python && ./setup.py test --enable-eigen --no-build-core-library"
 
     # test installing by "./setup.py install"

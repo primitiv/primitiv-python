@@ -40,7 +40,8 @@ docker exec travis-ci bash -c "cd ./pocl && make && make install"
 
 if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     # script
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl -- -DCMAKE_VERBOSE_MAKEFILE=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen --enable-opencl -- -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl"
 
     # test installing by "pip install"
@@ -60,13 +61,14 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 else
     # install core library
-    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make install"
     docker exec travis-ci bash -c "ldconfig"
 
     # script
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl --no-build-core-library"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen --enable-opencl --no-build-core-library"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl --no-build-core-library"
 
     # test installing by "./setup.py install"

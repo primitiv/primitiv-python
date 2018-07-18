@@ -180,6 +180,17 @@ if build_core:
     setup_kwargs["cmake_install_dir"] = "./"
     setup_kwargs["setup_requires"] = ["scikit-build"]
     setup_kwargs["cmake_args"] = ["-DPRIMITIV_BUILD_STATIC_LIBRARY=ON"]
+    if sys.platform == "darwin":
+        # NOTE(vbkaisetsu):
+        # scikit-build adds -DCMAKE_OSX_DEPLOYMENT_TARGET with the default target if it does not
+        # set manually. However scikit-build does not check cmake_args argument of setup()
+        # for the target.
+        try:
+            cmake_args_pos = sys.argv.index("--")
+        except ValueError:
+            cmake_args_pos = len(sys.argv)
+            sys.argv.append("--")
+        sys.argv.insert(cmake_args_pos + 1, "-DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.12")
     if enable_cuda:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_CUDA=ON")
     if enable_eigen:
