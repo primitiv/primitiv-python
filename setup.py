@@ -48,6 +48,7 @@ else:
     enable_eigen = eigen_bundled_exists
 
 if build_core:
+    import skbuild
     from skbuild import setup
 else:
     from setuptools import setup
@@ -88,10 +89,10 @@ def ext_common_args(*args, libraries=[], **kwargs):
             *args, **kwargs,
             language="c++",
             libraries=libs,
-            library_dirs=["_skbuild/cmake-install/lib"],
+            library_dirs=[os.path.join(skbuild.constants.CMAKE_INSTALL_DIR, "lib")],
             include_dirs=[
                 np.get_include(),
-                "_skbuild/cmake-install/include",
+                os.path.join(skbuild.constants.CMAKE_INSTALL_DIR, "include"),
                 os.path.join(dirname, "primitiv"),
             ],
             extra_compile_args=["-std=c++11"],
@@ -166,7 +167,7 @@ if enable_opencl:
         ext_common_args(
             "primitiv.devices._opencl_device",
             libraries=[
-                "clBLAS",
+                "clblast",
                 "OpenCL",
             ],
             sources=["primitiv/devices/_opencl_device.pyx"],
