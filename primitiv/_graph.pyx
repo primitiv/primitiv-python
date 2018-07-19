@@ -295,6 +295,8 @@ cdef class Graph:
         :rtype: primitiv.Graph
 
         """
+        if py_primitiv_default_graph is None:
+            raise RuntimeError("Default object is null.")
         return py_primitiv_default_graph
 
     def clear(self):

@@ -37,6 +37,8 @@ cdef class Device:
         :rtype: primitiv.Device
 
         """
+        if py_primitiv_default_device is None:
+            raise RuntimeError("Default object is null.")
         return py_primitiv_default_device
 
     def dump_description(self):
