@@ -7,11 +7,15 @@ docker run --name travis-ci -v $TRAVIS_BUILD_DIR:/primitiv-python -td ubuntu:rol
 
 # install
 docker exec travis-ci bash -c "apt update"
-docker exec travis-ci bash -c "apt install -y git build-essential cmake python3-dev python3-pip python3-numpy libeigen3-dev"
+docker exec travis-ci bash -c "apt install -y build-essential cmake python3-dev python3-pip python3-numpy libeigen3-dev"
 docker exec travis-ci bash -c "pip3 install cython scikit-build"
 
 # install OpenCL environment
-docker exec travis-ci bash -c "apt install -y opencl-headers libclblas-dev pkg-config libhwloc-dev libltdl-dev ocl-icd-dev ocl-icd-opencl-dev clang-3.8 llvm-3.8-dev libclang-3.8-dev libz-dev"
+docker exec travis-ci bash -c "apt install -y opencl-headers git wget pkg-config libhwloc-dev libltdl-dev ocl-icd-dev ocl-icd-opencl-dev clang llvm-dev libclang-dev libz-dev"
+docker exec travis-ci bash -c "wget https://github.com/CNugteren/CLBlast/archive/1.2.0.tar.gz -O ./clblast.tar.gz"
+docker exec travis-ci bash -c "mkdir ./clblast"
+docker exec travis-ci bash -c "tar xf ./clblast.tar.gz -C ./clblast --strip-components 1"
+docker exec travis-ci bash -c "cd ./clblast && cmake . && make && make install"
 # pocl 0.13 does not contain mem_fence() function that is used by primitiv.
 # We build the latest pocl instead of using distribution's package.
 # See: https://github.com/pocl/pocl/issues/294
@@ -21,7 +25,8 @@ docker exec travis-ci bash -c "cd ./pocl && make && make install"
 
 if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     # script
-    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl -- -DCMAKE_VERBOSE_MAKEFILE=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen --enable-opencl -- -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl"
 
     # test installing by "pip install"
@@ -41,13 +46,14 @@ if [ "${WITH_CORE_LIBRARY}" = "yes" ]; then
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
 else
     # install core library
-    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON"
+    docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && cmake . -DPRIMITIV_USE_EIGEN=ON -DPRIMITIV_USE_OPENCL=ON -DCMAKE_VERBOSE_MAKEFILE=ON"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make"
     docker exec travis-ci bash -c "cd /primitiv-python/primitiv-core && make install"
     docker exec travis-ci bash -c "ldconfig"
 
     # script
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build --enable-eigen --enable-opencl --no-build-core-library"
+    docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py build_ext -i --enable-eigen --enable-opencl --no-build-core-library"
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py test --enable-eigen --enable-opencl --no-build-core-library"
 
     # test installing by "./setup.py install"

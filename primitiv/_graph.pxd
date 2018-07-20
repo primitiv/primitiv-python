@@ -26,8 +26,6 @@ cdef extern from "primitiv/graph.h" nogil:
 cdef extern from "primitiv/graph.h" nogil:
     cdef cppclass CppGraph "primitiv::Graph":
         CppGraph() except +
-        @staticmethod
-        void set_default(CppGraph &g) except +
         void clear() except +
         const CppTensor &forward(const CppNode &node) except +
         void backward(const CppNode &node) except +

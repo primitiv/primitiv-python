@@ -1,7 +1,5 @@
 cdef extern from "primitiv/device.h":
     cdef cppclass CppDevice "primitiv::Device":
-        @staticmethod
-        void set_default(CppDevice &dev) except +
         void dump_description() except +
 
 

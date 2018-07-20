@@ -48,6 +48,7 @@ else:
     enable_eigen = eigen_bundled_exists
 
 if build_core:
+    import skbuild
     from skbuild import setup
 else:
     from setuptools import setup
@@ -88,10 +89,10 @@ def ext_common_args(*args, libraries=[], **kwargs):
             *args, **kwargs,
             language="c++",
             libraries=libs,
-            library_dirs=["_skbuild/cmake-install/lib"],
+            library_dirs=[os.path.join(skbuild.constants.CMAKE_INSTALL_DIR, "lib")],
             include_dirs=[
                 np.get_include(),
-                "_skbuild/cmake-install/include",
+                os.path.join(skbuild.constants.CMAKE_INSTALL_DIR, "include"),
                 os.path.join(dirname, "primitiv"),
             ],
             extra_compile_args=["-std=c++11"],
@@ -166,7 +167,7 @@ if enable_opencl:
         ext_common_args(
             "primitiv.devices._opencl_device",
             libraries=[
-                "clBLAS",
+                "clblast",
                 "OpenCL",
             ],
             sources=["primitiv/devices/_opencl_device.pyx"],
@@ -179,6 +180,17 @@ if build_core:
     setup_kwargs["cmake_install_dir"] = "./"
     setup_kwargs["setup_requires"] = ["scikit-build"]
     setup_kwargs["cmake_args"] = ["-DPRIMITIV_BUILD_STATIC_LIBRARY=ON"]
+    if sys.platform == "darwin":
+        # NOTE(vbkaisetsu):
+        # scikit-build adds -DCMAKE_OSX_DEPLOYMENT_TARGET with the default target if it does not
+        # set manually. However scikit-build does not check cmake_args argument of setup()
+        # for the target.
+        try:
+            cmake_args_pos = sys.argv.index("--")
+        except ValueError:
+            cmake_args_pos = len(sys.argv)
+            sys.argv.append("--")
+        sys.argv.insert(cmake_args_pos + 1, "-DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.12")
     if enable_cuda:
         setup_kwargs["cmake_args"].append("-DPRIMITIV_USE_CUDA=ON")
     if enable_eigen:
