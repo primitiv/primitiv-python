@@ -10,7 +10,7 @@ from primitiv._parameter cimport CppParameter, Parameter
 from primitiv._shape cimport CppShape
 
 
-cdef extern from "primitiv/optimizer.h":
+cdef extern from "primitiv/core/optimizer.h":
     cdef cppclass CppOptimizer "primitiv::Optimizer":
         CppOptimizer(CppOptimizer &&) except +
         CppOptimizer() except +
