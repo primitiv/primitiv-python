@@ -52,7 +52,6 @@ class EncoderDecoder(Model):
         self.pby = Parameter()
         self.src_lstm = LSTM()
         self.trg_lstm = LSTM()
-        self.scan_attributes()
 
     def init(self, src_vocab_size, trg_vocab_size, embed_size, hidden_size):
         """Creates a new EncoderDecoder object."""
