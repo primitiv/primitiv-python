@@ -54,7 +54,6 @@ class AttentionalEncoderDecoder(Model):
         self.src_fw_lstm = LSTM()
         self.src_bw_lstm = LSTM()
         self.trg_lstm = LSTM()
-        self.scan_attributes()
 
     def init(self, src_vocab_size, trg_vocab_size, embed_size, hidden_size):
         """Creates a new AttentionalEncoderDecoder object."""

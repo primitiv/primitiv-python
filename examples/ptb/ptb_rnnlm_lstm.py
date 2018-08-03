@@ -25,7 +25,6 @@ class Affine(Model):
     def __init__(self, in_size, out_size):
         self.pw = Parameter([out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pb = Parameter([out_size], I.Constant(0))
-        self.scan_attributes()
 
     # Initializes internal values.
     def reset(self):
@@ -52,7 +51,6 @@ class LSTM(Model):
         self.pwxh = Parameter([4 * out_size, in_size], I.Uniform(-0.1, 0.1))
         self.pwhh = Parameter([4 * out_size, out_size], I.Uniform(-0.1, 0.1))
         self.pbh = Parameter([4 * out_size], I.Constant(0))
-        self.scan_attributes()
 
     # Initializes internal values.
     def restart(self):
@@ -82,7 +80,6 @@ class RNNLM(Model):
         self.rnn1 = LSTM(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.rnn2 = LSTM(NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS)
         self.hy = Affine(NUM_HIDDEN_UNITS, vocab_size)
-        self.scan_attributes()
 
 
     # Forward function of RNNLM. Input data should be arranged below:
