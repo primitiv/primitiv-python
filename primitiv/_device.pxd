@@ -1,4 +1,4 @@
-cdef extern from "primitiv/device.h":
+cdef extern from "primitiv/core/device.h":
     cdef cppclass CppDevice "primitiv::Device":
         void dump_description() except +
 

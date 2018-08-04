@@ -7,7 +7,7 @@ from primitiv._device cimport CppDevice
 from primitiv._parameter cimport CppParameter
 
 
-cdef extern from "primitiv/model.h":
+cdef extern from "primitiv/core/model.h":
     cdef cppclass CppModel "primitiv::Model":
         CppModel() except +
         void load(string &path, bool with_stats, CppDevice *device) except +

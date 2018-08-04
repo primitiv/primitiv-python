@@ -159,30 +159,11 @@ class functions:
         return wrapNode(func_elu(x.wrapped, a))
 
     @staticmethod
-    def selu(Node x, float a, float s):
-        return wrapNode(func_selu(x.wrapped, a, s))
-
-    @staticmethod
     def sum(x, dim = None):
-        cdef vector[CppNode] xs
-        cdef Node node
         if isinstance(x, list):
-            for node in x:
-                xs.push_back(node.wrapped)
-            return wrapNode(func_sum(xs))
+            return functions.sum_list(x)
         else:
             return wrapNode(func_sum((<Node> x).wrapped, <unsigned> dim))
-
-    @staticmethod
-    def mean(x, dim = None):
-        cdef vector[CppNode] xs
-        cdef Node node
-        if isinstance(x, list):
-            for node in x:
-                xs.push_back(node.wrapped)
-            return wrapNode(func_mean(xs))
-        else:
-            return wrapNode(func_mean((<Node> x).wrapped, <unsigned> dim))
 
     @staticmethod
     def broadcast(Node x, unsigned dim, unsigned size):
@@ -243,24 +224,6 @@ class functions:
                                            get_cpp_device(device), get_cpp_graph(graph)))
 
     @staticmethod
-    def zeros(shape, Device device = None, Graph graph = None):
-        if device is None:
-            device = Device.get_default()
-        if graph is None:
-            graph = Graph.get_default()
-        return wrapNode(func_zeros_node(normShape(shape).wrapped,
-                                        get_cpp_device(device), get_cpp_graph(graph)))
-
-    @staticmethod
-    def ones(shape, Device device = None, Graph graph = None):
-        if device is None:
-            device = Device.get_default()
-        if graph is None:
-            graph = Graph.get_default()
-        return wrapNode(func_ones_node(normShape(shape).wrapped,
-                                       get_cpp_device(device), get_cpp_graph(graph)))
-
-    @staticmethod
     def identity(unsigned size, Device device = None, Graph graph = None):
         if device is None:
             device = Device.get_default()
@@ -268,18 +231,69 @@ class functions:
             graph = Graph.get_default()
         return wrapNode(func_identity_node(size, get_cpp_device(device), get_cpp_graph(graph)))
 
+    # contrib functions
+
+    @staticmethod
+    def selu(Node x, float a=1.6732632423543772848170429916717, float s=1.0507009873554804934193349852946):
+        return s * functions.elu(x, a);
+
+    @staticmethod
+    def sum_list(list xs):
+        if not xs:
+            raise TypeError("No nodes to sum.")
+        ret = xs[0]
+        for x in xs[1:]:
+            ret = ret + x
+        return ret
+
+    @staticmethod
+    def mean(x, dim = None):
+        if isinstance(x, list):
+            return functions.sum_list(x) / len(x)
+        else:
+            return functions.sum(x, dim) / x.shape()[dim]
+
+    @staticmethod
+    def zeros(shape, Device dev = None, Graph g = None):
+        return functions.constant(shape, 0.0, dev, g)
+
+    @staticmethod
+    def ones(shape, Device dev = None, Graph g = None):
+        return functions.constant(shape, 1.0, dev, g)
+
+    @staticmethod
+    def dropout(Node x, float rate, bool enabled):
+        if not enabled:
+            return x
+        if rate == 1.0:
+            return 0.0 * x
+        p = 1.0 - rate
+        return (1.0 / p) * x * functions.random.bernoulli(x.shape(), p, x.device())
+
+    # end contrib functions
+
     class batch:
         @staticmethod
         def sum(Node x):
             return wrapNode(func_batch_sum[CppNode](x.wrapped))
 
+        # contrib functions
+
         @staticmethod
         def mean(Node x):
-            return wrapNode(func_batch_mean[CppNode](x.wrapped))
+            return functions.batch.sum(x) / x.shape().batch()
 
         @staticmethod
         def normalize(Node x):
-            return wrapNode(func_batch_normalize[CppNode](x.wrapped))
+            if not x.shape().has_batch():
+                return x
+            b = x.shape().batch()
+            scale = b / (b - 1)
+            m = functions.batch.mean(x)
+            v = scale * (functions.batch.mean(x * x) - m * m)
+            return (x - m) / functions.sqrt(v + 1e-8)
+
+        # end contrib functions
 
     class random:
         @staticmethod
@@ -326,10 +340,6 @@ class functions:
                 graph = Graph.get_default()
             return wrapNode(func_random_gumbel_node(normShape(shape).wrapped, mu, beta,
                                                     get_cpp_device(device), get_cpp_graph(graph)))
-
-    @staticmethod
-    def dropout(Node x, float rate, bool enabled):
-        return wrapNode(func_dropout(x.wrapped, rate, enabled))
 
 
 class tensor_functions:
@@ -473,30 +483,11 @@ class tensor_functions:
         return Tensor.get_wrapper_with_new(new CppTensor(func_elu(x.wrapped[0], a)))
 
     @staticmethod
-    def selu(Tensor x, float a, float s):
-        return Tensor.get_wrapper_with_new(new CppTensor(func_selu(x.wrapped[0], a, s)))
-
-    @staticmethod
     def sum(x, dim = None):
-        cdef vector[CppTensor] xs
-        cdef Tensor t
         if isinstance(x, list):
-            for t in x:
-                xs.push_back(t.wrapped[0])
-            return Tensor.get_wrapper_with_new(new CppTensor(func_sum(xs)))
+            return tensor_functions.sum_list(x)
         else:
             return Tensor.get_wrapper_with_new(new CppTensor(func_sum((<Tensor> x).wrapped[0], <unsigned> dim)))
-
-    @staticmethod
-    def mean(x, dim = None):
-        cdef vector[CppTensor] xs
-        cdef Tensor t
-        if isinstance(x, list):
-            for t in x:
-                xs.push_back(t.wrapped[0])
-            return Tensor.get_wrapper_with_new(new CppTensor(func_mean(xs)))
-        else:
-            return Tensor.get_wrapper_with_new(new CppTensor(func_mean((<Tensor> x).wrapped[0], <unsigned> dim)))
 
     @staticmethod
     def broadcast(Tensor x, unsigned dim, unsigned size):
@@ -554,19 +545,6 @@ class tensor_functions:
         return Tensor.get_wrapper_with_new(new CppTensor(func_constant_tensor(normShape(shape).wrapped, k,
                                                                               get_cpp_device(device))))
 
-    @staticmethod
-    def zeros(shape, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_zeros_tensor(normShape(shape).wrapped,
-                                                                           get_cpp_device(device))))
-
-    @staticmethod
-    def ones(shape, Device device = None):
-        if device is None:
-            device = Device.get_default()
-        return Tensor.get_wrapper_with_new(new CppTensor(func_ones_tensor(normShape(shape).wrapped,
-                                                                          get_cpp_device(device))))
 
     @staticmethod
     def identity(unsigned size, Device device = None):
@@ -574,18 +552,69 @@ class tensor_functions:
             device = Device.get_default()
         return Tensor.get_wrapper_with_new(new CppTensor(func_identity_tensor(size, get_cpp_device(device))))
 
+    # contrib functions
+
+    @staticmethod
+    def selu(Node x, float a=1.6732632423543772848170429916717, float s=1.0507009873554804934193349852946):
+        return s * tensor_functions.elu(x, a);
+
+    @staticmethod
+    def sum_list(list xs):
+        if not xs:
+            raise TypeError("No nodes to sum.")
+        ret = xs[0]
+        for x in xs[1:]:
+            ret = ret + x
+        return ret
+
+    @staticmethod
+    def mean(x, dim = None):
+        if isinstance(x, list):
+            return tensor_functions.sum_list(x) / len(x)
+        else:
+            return tensor_functions.sum(x, dim) / x.shape()[dim]
+
+    @staticmethod
+    def zeros(shape, Device dev = None):
+        return tensor_functions.constant(shape, 0.0, dev)
+
+    @staticmethod
+    def ones(shape, Device dev = None):
+        return tensor_functions.constant(shape, 1.0, dev)
+
+    @staticmethod
+    def dropout(Node x, float rate, bool enabled):
+        if not enabled:
+            return x
+        if rate == 1.0:
+            return 0.0 * x
+        p = 1.0 - rate
+        return (1.0 / p) * x * tensor_functions.random.bernoulli(x.shape(), p, x.device())
+
+    # end contrib functions
+
     class batch:
         @staticmethod
         def sum(Tensor x):
             return Tensor.get_wrapper_with_new(new CppTensor(func_batch_sum[CppTensor](x.wrapped[0])))
 
-        @staticmethod
-        def mean(Tensor x):
-            return Tensor.get_wrapper_with_new(new CppTensor(func_batch_mean[CppTensor](x.wrapped[0])))
+        # contrib functions
 
         @staticmethod
-        def normalize(Tensor x):
-            return Tensor.get_wrapper_with_new(new CppTensor(func_batch_normalize[CppTensor](x.wrapped[0])))
+        def mean(Node x):
+            return tensor_functions.batch.sum(x) / x.shape().batch()
+
+        @staticmethod
+        def normalize(Node x):
+            if not x.shape().has_batch():
+                return x
+            b = x.shape().batch()
+            scale = b / (b - 1)
+            m = tensor_functions.batch.mean(x)
+            v = scale * (tensor_functions.batch.mean(x * x) - m * m)
+            return (x - m) / tensor_functions.sqrt(v + 1e-8)
+
+        # end contrib functions
 
     class random:
         @staticmethod
@@ -622,7 +651,3 @@ class tensor_functions:
                 device = Device.get_default()
             return Tensor.get_wrapper_with_new(new CppTensor(func_random_gumbel_tensor(normShape(shape).wrapped, mu, beta,
                                                                                        get_cpp_device(device))))
-
-    @staticmethod
-    def dropout(Tensor x, float rate, bool enabled):
-        return Tensor.get_wrapper_with_new(new CppTensor(func_dropout(x.wrapped[0], rate, enabled)))
