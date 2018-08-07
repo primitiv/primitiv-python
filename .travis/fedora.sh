@@ -70,6 +70,9 @@ else
     docker exec travis-ci bash -c "cd /primitiv-python && ./setup.py install --enable-eigen --no-build-core-library"
     docker exec travis-ci bash -c "export LD_LIBRARY_PATH=/usr/local/lib && python3 -c 'import primitiv; dev = primitiv.devices.Naive(); dev = primitiv.devices.Eigen()'"
     docker exec travis-ci bash -c "pip3 uninstall -y primitiv"
+
+    # check binding coverage
+    docker exec travis-ci bash -c "/primitiv-python/utils/check_binding_coverage.py /primitiv-python/primitiv-core/primitiv/libprimitiv.so \$(find /primitiv-python/build -name \"_function.*.so\") -n primitiv::functions"
 fi
 
 # after_script
