@@ -1,1 +1,1 @@
-sqhinx>=1.7
+sphinx>=1.7
