@@ -6,5 +6,6 @@ __pycache__
 ./*.egg-info
 ./build
 ./dist
+./docs/build
 ./primitiv/_trainer.h
 ./primitiv/_trainer_api.h
