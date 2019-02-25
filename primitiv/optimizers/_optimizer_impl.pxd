@@ -5,7 +5,7 @@ from primitiv._device cimport CppDevice
 from primitiv._optimizer cimport CppOptimizer, Optimizer
 
 
-cdef extern from "primitiv/optimizer_impl.h":
+cdef extern from "primitiv/core/optimizer_impl.h":
     cdef cppclass CppSGD "primitiv::optimizers::SGD" (CppOptimizer):
         CppSGD(float eta)
         float eta()

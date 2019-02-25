@@ -178,7 +178,11 @@ setup_kwargs = {}
 if build_core:
     setup_kwargs["cmake_source_dir"] = SUBMODULE_DIR
     setup_kwargs["cmake_install_dir"] = "./"
-    setup_kwargs["setup_requires"] = ["scikit-build"]
+    setup_kwargs["setup_requires"] = [
+        "cmake>=0.9.0",
+        "cython>=0.29.5",
+        "scikit-build>=0.6.1",
+    ]
     setup_kwargs["cmake_args"] = ["-DPRIMITIV_BUILD_STATIC_LIBRARY=ON"]
     if sys.platform == "darwin":
         # NOTE(vbkaisetsu):
@@ -237,8 +241,7 @@ setup(
         "primitiv.optimizers",
     ],
     install_requires=[
-        "cython",
-        "numpy",
+        "numpy>=1.16.1",
     ],
     **setup_kwargs,
 )

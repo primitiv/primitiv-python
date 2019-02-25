@@ -34,54 +34,36 @@ matrix:
     - stage: test
       os: osx
       env: SCRIPT=osx
-    - if: branch = develop
+    - if: branch IN (master, develop)
       stage: deploy
       os: linux
+      env: SCRIPT=manylinux2010 BINARY_PACKAGE=yes
       language: python
       python: 3.5
-      script:
-        - export PRIMITIV_PYTHON_BUILD_NUMBER="dev${TRAVIS_BUILD_NUMBER}"
-        - pip install cython numpy scikit-build twine
-        - wget "http://bitbucket.org/eigen/eigen/get/3.3.4.tar.bz2" -O eigen-downloaded.tar.gz
-        - mkdir ./eigen-downloaded
-        - tar xf ./eigen-downloaded.tar.gz --strip-components=1 -C ./eigen-downloaded
-        - $TRAVIS_BUILD_DIR/setup.py sdist --bundle-core-library --bundle-eigen-headers ./eigen-downloaded
-        - pip install $TRAVIS_BUILD_DIR/dist/primitiv-*.tar.gz
-        - mkdir ./work
-        - pushd ./work
-        - python -c "import primitiv; dev = primitiv.devices.Eigen()"
-        - popd
-      deploy:
-        skip_cleanup: true
-        provider: script
-        script: twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD $TRAVIS_BUILD_DIR/dist/primitiv-*.tar.gz
-        on:
-          tags: false
-          branch: develop
-    - if: branch = master
+    - if: branch IN (master, develop)
       stage: deploy
       os: linux
+      env: SCRIPT=manylinux2010 BINARY_PACKAGE=yes
       language: python
-      python: 3.5
-      script:
-        - export PRIMITIV_PYTHON_BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
-        - pip install cython numpy scikit-build twine
-        - wget "http://bitbucket.org/eigen/eigen/get/3.3.4.tar.bz2" -O eigen-downloaded.tar.gz
-        - mkdir ./eigen-downloaded
-        - tar xf ./eigen-downloaded.tar.gz --strip-components=1 -C ./eigen-downloaded
-        - $TRAVIS_BUILD_DIR/setup.py sdist --bundle-core-library --bundle-eigen-headers ./eigen-downloaded
-        - pip install $TRAVIS_BUILD_DIR/dist/primitiv-*.tar.gz
-        - mkdir ./work
-        - pushd ./work
-        - python -c "import primitiv; dev = primitiv.devices.Eigen()"
-        - popd
-      deploy:
-        skip_cleanup: true
-        provider: script
-        script: twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD $TRAVIS_BUILD_DIR/dist/primitiv-*.tar.gz
-        on:
-          tags: false
-          branch: master
+      python: 3.6
+    - if: branch IN (master, develop)
+      stage: deploy
+      os: linux
+      env: SCRIPT=sdist
+      language: python
+      python: 3.6
 
 script:
   - $TRAVIS_BUILD_DIR/.travis/${SCRIPT}.sh
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:
+    - $TRAVIS_BUILD_DIR/.travis/deploy.sh
+  on:
+    tags: false
+    condition: $TRAVIS_BUILD_STAGE_NAME = Deploy
+    branch:
+      - develop
+      - master

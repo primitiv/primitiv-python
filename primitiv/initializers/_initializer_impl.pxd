@@ -1,7 +1,7 @@
 from primitiv._initializer cimport CppInitializer, Initializer
 
 
-cdef extern from "primitiv/initializer_impl.h":
+cdef extern from "primitiv/core/initializer_impl.h":
     cdef cppclass CppConstant "primitiv::initializers::Constant" (CppInitializer):
         CppConstant(float k)
 
