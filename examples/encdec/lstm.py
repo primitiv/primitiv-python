@@ -21,7 +21,6 @@ class LSTM(Model):
         self.pwxh = Parameter()
         self.pwhh = Parameter()
         self.pbh = Parameter()
-        self.scan_attributes()
 
     def init(self, in_size, out_size):
         """Creates a new LSTM."""

@@ -24,7 +24,6 @@ class RNNLM(Model):
         self.pwlookup = Parameter([NUM_HIDDEN_UNITS, vocab_size], I.XavierUniform())
         self.pwxs = Parameter([NUM_HIDDEN_UNITS, NUM_HIDDEN_UNITS], I.XavierUniform())
         self.pwsy = Parameter([vocab_size, NUM_HIDDEN_UNITS], I.XavierUniform())
-        self.scan_attributes()
 
     # Forward function of RNNLM. Input data should be arranged below:
     # inputs = {
