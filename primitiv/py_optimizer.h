@@ -1,8 +1,7 @@
 #ifndef PRIMITIV_PYTHON_PY_OPTIMIZER_H_
 #define PRIMITIV_PYTHON_PY_OPTIMIZER_H_
 
-#include <primitiv/optimizer.h>
-#include <iostream>
+#include <primitiv/core/optimizer.h>
 
 __PYX_EXTERN_C int primitiv_python_optimizer_get_configs(
                         PyObject *obj,

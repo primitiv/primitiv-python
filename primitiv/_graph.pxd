@@ -6,7 +6,7 @@ from primitiv._shape cimport CppShape
 from primitiv._tensor cimport CppTensor
 
 
-cdef extern from "primitiv/graph.h" nogil:
+cdef extern from "primitiv/core/graph.h" nogil:
     cdef cppclass CppNode "primitiv::Node":
         CppNode(CppNode &&src) except +
         CppNode() except +
@@ -23,7 +23,7 @@ cdef extern from "primitiv/graph.h" nogil:
         void backward() except +
 
 
-cdef extern from "primitiv/graph.h" nogil:
+cdef extern from "primitiv/core/graph.h" nogil:
     cdef cppclass CppGraph "primitiv::Graph":
         CppGraph() except +
         void clear() except +

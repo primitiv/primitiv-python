@@ -9,7 +9,7 @@ from primitiv._shape cimport CppShape
 from primitiv._parameter cimport CppParameter
 
 
-cdef extern from "primitiv/functions.h":
+cdef extern from "primitiv/core/basic_functions.h":
     CppTensor func_input_tensor "primitiv::functions::input_tensor" (const CppShape &shape, const vector[float] &data, CppDevice *dev) except +
     CppNode func_input_node "primitiv::functions::input_node" (const CppShape &shape, const vector[float] &data, CppDevice *dev, CppGraph *g) except +
     CppTensor func_parameter_tensor "primitiv::functions::parameter_tensor" (CppParameter &param) except +
@@ -40,12 +40,7 @@ cdef extern from "primitiv/functions.h":
     Var func_prelu "primitiv::functions::prelu" [Var](const Var &x, float a) except +
     Var func_elu "primitiv::functions::elu" [Var](const Var &x, float a) except +
     Var func_selu "primitiv::functions::selu" [Var](const Var &x, float a, float s) except +
-    CppNode func_sum "primitiv::functions::sum" (const vector[CppNode] &xs) except +
-    CppTensor func_sum "primitiv::functions::sum" (const vector[CppTensor] &xs) except +
     Var func_sum "primitiv::functions::sum" [Var](const Var &x, unsigned dim) except +
-    CppNode func_mean "primitiv::functions::mean" (const vector[CppNode] &xs) except +
-    CppTensor func_mean "primitiv::functions::mean" (const vector[CppTensor] &xs) except +
-    Var func_mean "primitiv::functions::mean" [Var](const Var &x, unsigned dim) except +
     Var func_broadcast "primitiv::functions::broadcast" [Var](const Var &x, unsigned dim, unsigned size) except +
     Var func_logsumexp "primitiv::functions::logsumexp" [Var](const Var &x, unsigned dim) except +
     Var func_log_softmax "primitiv::functions::log_softmax" [Var](const Var &x, unsigned dim) except +
@@ -58,13 +53,8 @@ cdef extern from "primitiv/functions.h":
 
     CppTensor func_constant_tensor "primitiv::functions::constant_tensor" (const CppShape &shape, float k, CppDevice *dev) except +
     CppNode func_constant_node "primitiv::functions::constant_node" (const CppShape &shape, float k, CppDevice *dev, CppGraph *g) except +
-    CppTensor func_zeros_tensor "primitiv::functions::zeros_tensor" (const CppShape &shape, CppDevice *dev) except +
-    CppNode func_zeros_node "primitiv::functions::zeros_node" (const CppShape &shape, CppDevice *dev, CppGraph *g) except +
-    CppTensor func_ones_tensor "primitiv::functions::ones_tensor" (const CppShape &shape, CppDevice *dev) except +
-    CppNode func_ones_node "primitiv::functions::ones_node" (const CppShape &shape, CppDevice *dev, CppGraph *g) except +
     CppTensor func_identity_tensor "primitiv::functions::identity_tensor" (unsigned size, CppDevice *dev) except +
     CppNode func_identity_node "primitiv::functions::identity_node" (unsigned size, CppDevice *dev, CppGraph *g) except +
-    Var func_dropout "primitiv::functions::dropout" [Var](const Var &x, float rate, bool enabled) except +
 
     Var func_positive "primitiv::functions::positive" [Var](const Var &x) except +
     Var func_negative "primitiv::functions::negative" [Var](const Var &x) except +
@@ -82,13 +72,11 @@ cdef extern from "primitiv/functions.h":
     Var func_divide "primitiv::functions::divide" [Var](const Var &a, const Var &b) except +
 
 
-cdef extern from "primitiv/functions.h":
+cdef extern from "primitiv/core/basic_functions.h":
     Var func_batch_sum "primitiv::functions::batch::sum" [Var](const Var &x) except +
-    Var func_batch_mean "primitiv::functions::batch::mean" [Var](const Var &x) except +
-    Var func_batch_normalize "primitiv::functions::batch::normalize" [Var](const Var &x) except +
 
 
-cdef extern from "primitiv/functions.h":
+cdef extern from "primitiv/core/basic_functions.h":
 
     CppNode func_random_bernoulli_node "primitiv::functions::random::bernoulli_node" (const CppShape &shape, float p, CppDevice *dev, CppGraph *g) except +
     CppTensor func_random_bernoulli_tensor "primitiv::functions::random::bernoulli_tensor" (const CppShape &shape, float p, CppDevice *dev) except +

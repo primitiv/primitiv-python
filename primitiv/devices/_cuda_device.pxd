@@ -1,7 +1,7 @@
 from primitiv._device cimport CppDevice, Device
 
 
-cdef extern from "primitiv/cuda_device.h":
+cdef extern from "primitiv/devices/cuda/device.h":
     cdef cppclass CppCUDA "primitiv::devices::CUDA" (CppDevice):
         CppCUDA(unsigned device_id) except +
         CppCUDA(unsigned device_id, unsigned rng_seed) except +

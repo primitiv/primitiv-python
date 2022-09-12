@@ -9,7 +9,7 @@ from primitiv._device cimport CppDevice
 from primitiv._initializer cimport CppInitializer, Initializer
 
 
-cdef extern from "primitiv/parameter.h":
+cdef extern from "primitiv/core/parameter.h":
     cdef cppclass CppParameter "primitiv::Parameter":
         CppParameter() except +
         CppParameter(const CppShape &shape, const vector[float] &value, CppDevice *device) except +
